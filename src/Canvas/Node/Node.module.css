@@ -1,0 +1,63 @@
+/* Normal  */
+.normal {
+  fill: #34373c;
+  cursor: pointer;
+  stroke: none;
+  transition: fill 0.05s linear;
+}
+
+.normalOutline {
+  fill: none;
+  stroke: #95999e;
+  stroke-width: 1px;
+}
+
+.normalIcon {
+  fill: #d1d7e4;
+  stroke: none;
+  cursor: pointer;
+}
+
+/* Selected */
+.selected {
+  composes: normal;
+  fill: #24272b;
+  stroke: none;
+}
+
+.selectedOutline {
+  composes: normalOutline;
+  stroke: #95999e;
+  stroke-width: 2px;
+}
+
+.selectedIcon {
+  composes: normalIcon;
+  fill: #d1d7e4;
+}
+
+.selectedHighlight {
+  fill: #c4ebff;
+  opacity: 0.0514605978;
+}
+
+/* UnSelected */
+.unselected {
+  composes: normal;
+  fill: #b5b5b5;
+  stroke: none;
+}
+
+.unselectedOutline {
+  composes: normalOutline;
+  stroke: #b5b5b5;
+}
+
+.unselectedIcon {
+  composes: normalIcon;
+  fill: #dedede;
+}
+
+.nocursor {
+  cursor: none;
+}

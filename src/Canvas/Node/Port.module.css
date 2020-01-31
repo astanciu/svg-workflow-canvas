@@ -1,0 +1,24 @@
+.Port {
+  fill: #8a939a;
+  stroke: #4b5056;
+  cursor: pointer;
+  stroke-width: 3;
+}
+
+.PortHighlight {
+  composes: Port;
+  fill: #c4ff00;
+  stroke-width: 3;
+}
+
+.PortUnselected {
+  composes: Port;
+  fill: #dfe5e8;
+  stroke: #c8c8c8;
+}
+
+.PortHitBox {
+  fill: #ffffff00;
+  cursor: pointer;
+  stroke-width: 0;
+}

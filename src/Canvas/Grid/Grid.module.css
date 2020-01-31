@@ -1,0 +1,9 @@
+.small {
+  stroke-width: 1px;
+  stroke: #0000000d;
+}
+
+.big {
+  stroke-width: 3px;
+  stroke: #0000000d;
+}

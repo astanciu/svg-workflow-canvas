@@ -1,0 +1,42 @@
+.previewConnection {
+  stroke: #8a939a;
+  stroke-dasharray: 10;
+  stroke-width: 2px;
+  fill: none;
+}
+
+.Connection {
+  stroke: #8a939a;
+  fill: none;
+  cursor: pointer;
+}
+.ConnectionSelected {
+  composes: Connection;
+  stroke: red;
+}
+.ConnectionUnselected {
+  composes: Connection;
+  stroke: #d7d7da;
+}
+
+.ConnectionHitBox {
+  composes: Connection;
+  stroke: #ffffff00;
+  stroke-width: 16px;
+}
+
+.Close {
+  fill: #ff0000;
+  cursor: pointer;
+}
+
+.CloseOutline {
+  fill: #fff;
+  stroke-width: 1;
+  stroke: #ff0000;
+}
+
+.CloseX {
+  fill: #ffffff;
+  cursor: pointer;
+}

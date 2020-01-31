@@ -1,0 +1,19 @@
+.Title {
+  font-family: 'Fira Code', monospace;
+  /* font-size: 12px; */
+  fill: #34373c;
+  font-weight: normal;
+}
+.UnselectedTitle {
+  font-family: 'Fira Code', monospace;
+  font-size: 12px;
+  fill: #b5b5b5;
+  font-weight: normal;
+}
+.Description {
+  font-family: 'Fira Code', monospace;
+  font-size: 11px;
+  fill: #34373c;
+  font-weight: normal;
+  inline-size: 50px;
+}

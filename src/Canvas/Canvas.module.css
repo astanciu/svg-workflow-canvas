@@ -1,0 +1,7 @@
+.Canvas {
+  /* height: 100%;
+  width: 100%; */
+  touch-action: manipulation;
+  box-sizing: border-box;
+  background: #e7ebee;
+}

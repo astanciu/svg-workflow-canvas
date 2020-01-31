@@ -1,23 +1,56 @@
-/**
- * @class ExampleComponent
- */
+import React from 'react';
+import Canvas from './Canvas/Canvas';
+import styles from './index.module.css';
+import { WorkflowProps } from './Workflow/Types';
+import { useWorkflow } from './Workflow/useWorkflow';
 
-import * as React from 'react'
+export const WorkflowContext = React.createContext(null);
 
-import styles from './styles.css'
+export const Workflow = ({ workflow = null, scale = 1, snapToGrid = false }: WorkflowProps) => {
+  const [state, dispatch] = useWorkflow(workflow, { scale });
 
-export type Props = { text: string }
+  // We need to use callbacks on all these otherwise it
+  // forces all similar components to re-render, when just one
+  // item (node, connection) is actually changed. Alternative
+  // would be to pass dispatch as a prop.
+  const selectNode = React.useCallback(
+    node => dispatch({ type: 'selectNode', node }),
+    []
+  );
+  const updateNode = React.useCallback(
+    node => dispatch({ type: 'updateNode', node }),
+    []
+  );
+  const removeConnection = React.useCallback(
+    connection => dispatch({ type: 'removeConnection', connection }),
+    []
+  );
+  const createConnection = React.useCallback(
+    (from, to) => dispatch({ type: 'createConnection', from, to }),
+    []
+  );
+  const selectConnection = React.useCallback(
+    conn => dispatch({ type: 'selectConnection', connection: conn }),
+    []
+  );
 
-export default class ExampleComponent extends React.Component<Props> {
-  render() {
-    const {
-      text
-    } = this.props
+  const props = {
+    dispatch,
+    nodes: state.nodes,
+    updateNode,
+    selectNode,
+    selectedNode: state.selectedNode,
+    connections: state.connections,
+    selectedConnection: state.selectedConnection,
+    selectConnection,
+    createConnection,
+    removeConnection,
+    snapToGrid
+  };
 
-    return (
-      <div className={styles.test}>
-        Example Component: {text}
-      </div>
-    )
-  }
-}
+  return (
+    <div id="workflow-container" className={styles.CanvasContainer}>
+        <Canvas {...props} />
+    </div>
+  );
+};
