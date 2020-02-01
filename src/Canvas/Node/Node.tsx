@@ -50,7 +50,6 @@ class NodeComponent extends React.Component<Props> {
     const shouldUpdate = !(sameProps && sameState);
 
     return shouldUpdate;
-    // return true;
   }
 
   _onTap = e => {
@@ -80,9 +79,9 @@ class NodeComponent extends React.Component<Props> {
   };
 
   snapToGrid = () => {
-    if (!this.props.snapToGrid){
+    if (!this.props.snapToGrid) {
       // hacky, need it because this.dragging and pointer styles
-      this.setState({forceUpdate: Math.random()})
+      this.setState({ forceUpdate: Math.random() });
       return;
     }
 
@@ -161,6 +160,13 @@ class NodeComponent extends React.Component<Props> {
             points="40 5 70.3108891 22.25 70.3108891 56.75 40 74 9.68911087 56.75 9.68911087 22.25"
           />
         </g>
+
+        {/* <circle
+          fill="none" stroke="#999"
+          cx={0 }
+          cy={0 }
+          r="50"
+        /> */}
 
         <Icon
           icon={this.props.node.icon}

@@ -4,9 +4,14 @@
   "description": "Generic workflow builder react component using an SVG canvas",
   "keywords": [
     "workflow",
-    "svg",
+    "workflow component",
     "workflow builder",
-    "workflow designer"
+    "workflow designer",
+    "pipeline",
+    "component",
+    "ui",
+    "svg",
+    "react"
   ],
   "author": "Alex Stanciu <astanciu@gmail.com> (http://github.com/astanciu)",
   "license": "MIT",

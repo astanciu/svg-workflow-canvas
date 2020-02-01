@@ -1,13 +1,25 @@
-import React from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 import Canvas from '../Canvas/Canvas';
 import { WorkflowProps } from './Types';
 import { useWorkflow } from './useWorkflow';
 import styles from './Workflow.module.css';
-
+import { WorkflowData } from './WorkflowData';
 export const WorkflowContext = React.createContext(null);
 
-export const Workflow = ({ workflow = null, scale = 1, snapToGrid = false }: WorkflowProps) => {
-  const [state, dispatch] = useWorkflow(workflow, { scale });
+export const Workflow: FunctionComponent<WorkflowProps> = ({
+  workflow = null,
+  workflowChanged = () => {},
+  scale = 1,
+  snapToGrid = false,
+  render
+}) => {
+  const [state, dispatch] = useWorkflow(workflow, { scale, workflowChanged });
+
+  // Reset the reducer if we receive a new workflow json in props
+  useEffect(() => {
+    dispatch({ type: 'reset' });
+  }, [workflow]);
+
 
   // We need to use callbacks on all these otherwise it
   // forces all similar components to re-render, when just one
@@ -33,24 +45,32 @@ export const Workflow = ({ workflow = null, scale = 1, snapToGrid = false }: Wor
     conn => dispatch({ type: 'selectConnection', connection: conn }),
     []
   );
+  const insertNode = node => {
+    dispatch({ type: 'insertNode', node });
+  };
 
-  const props = {
-    dispatch,
-    nodes: state.nodes,
-    updateNode,
-    selectNode,
-    selectedNode: state.selectedNode,
-    connections: state.connections,
-    selectedConnection: state.selectedConnection,
-    selectConnection,
-    createConnection,
-    removeConnection,
-    snapToGrid
+  const addNode = node => {
+    insertNode(node.name);
+  };
+  const saveWorkflow = () => {
+    return WorkflowData.export(state);
   };
 
   return (
     <div id="workflow-container" className={styles.CanvasContainer}>
-        <Canvas {...props} />
+      {render && render(addNode, saveWorkflow)}
+      <Canvas
+        nodes={state.nodes}
+        updateNode={updateNode}
+        selectNode={selectNode}
+        selectedNode={state.selectedNode}
+        connections={state.connections}
+        selectedConnection={state.selectedConnection}
+        selectConnection={selectConnection}
+        createConnection={createConnection}
+        removeConnection={removeConnection}
+        snapToGrid={snapToGrid}
+      />
     </div>
   );
 };

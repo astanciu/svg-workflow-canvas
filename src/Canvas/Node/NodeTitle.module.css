@@ -1,8 +1,11 @@
 .Title {
   font-family: 'Fira Code', monospace;
-  /* font-size: 12px; */
+  font-size: 12px;
   fill: #34373c;
   font-weight: normal;
+  stroke: #e7ebee;
+  stroke-width: 4;
+  paint-order: stroke;
 }
 .UnselectedTitle {
   font-family: 'Fira Code', monospace;
