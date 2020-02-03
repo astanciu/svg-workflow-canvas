@@ -13,6 +13,8 @@ export const useWorkflow = (jsonWorkflow, options): [State, Dispatch<any>] => {
         return WorkflowData.updateNode(state, action.node);
       case 'insertNode':
         return WorkflowData.insertNode(state, action.node);
+      case 'removeNode':
+        return WorkflowData.removeNode(state, action.node);
       case 'selectConnection':
         return WorkflowData.selectConnection(state, action.connection);
       case 'createConnection':

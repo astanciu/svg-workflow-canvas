@@ -12,6 +12,8 @@ export class Node {
   public scale: number = 1;
   public outPortOffset: Point;
   public inPortOffset: Point;
+  public width = 80;
+  public height = 79;
 
   constructor(node: any) {
     Object.assign(this, node);

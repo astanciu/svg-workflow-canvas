@@ -3,3 +3,29 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+label {
+  margin-left: 10px;
+  font-size:14px;
+
+}
+
+input {
+  display: block;
+  border: 1px solid #a7afb7;
+  margin: 10px;
+  padding: 5px 10px;
+  font-size: 14px;
+  color: #5a616d;
+}
+
+.btn-remove {
+  display: block;
+  background-color: red;
+  border: 1px solid red;
+  margin: 30px 10px;
+  padding: 5px 10px;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+}

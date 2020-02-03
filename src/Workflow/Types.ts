@@ -15,7 +15,7 @@ export type WorkflowProps = {
   workflowChanged?: (workflow) => any;
   scale?: number;
   snapToGrid?: boolean;
-  render?: (add, save) => void;
+  render?: (add, save, updateNode, removeNode, selectedNode:Node|null) => void;
 };
 
 export type SerializedPoint = {

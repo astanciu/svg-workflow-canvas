@@ -61,3 +61,19 @@
 .nocursor {
   cursor: none;
 }
+
+/* Specials */
+.start {
+  composes: normal;
+  fill: #e15aa6;
+}
+.end {
+  composes: normal;
+  fill: #9fcc00;
+}
+
+.specialIcon {
+  composes: normalIcon;
+  fill: #eceff4
+}
+

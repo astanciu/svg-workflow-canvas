@@ -57,11 +57,15 @@ export class WorkflowData {
     const nodes = state.nodes.map((n: Node) => {
       if (n.id === node.id) {
         posChanged = !isEqual(n.position, node.position);
-        return node;
+        return node.clone();
       } else {
         return n;
       }
     });
+
+    if (state.selectedNode?.id == node.id) {
+      state.selectedNode = node;
+    }
 
     if (posChanged) {
       const connections = state.connections.map(conn => {
@@ -83,6 +87,16 @@ export class WorkflowData {
       return { ...state, nodes };
     }
   };
+
+  static removeNode(state: State, node: Node) {
+    const nodes = state.nodes.filter(n => n.id !== node.id);
+    const connections = state.connections.filter(c => {
+      if (c.from.id === node.id) return false;
+      if (c.to.id === node.id) return false;
+      return true;
+    });
+    return { ...state, nodes, connections, selectedNode: null };
+  }
 
   static removeConnection(state: State, conn: Connection) {
     const connections = state.connections.filter(c => c.id !== conn.id);

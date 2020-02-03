@@ -33,6 +33,10 @@ export const Workflow: FunctionComponent<WorkflowProps> = ({
     node => dispatch({ type: 'updateNode', node }),
     []
   );
+  const removeNode = React.useCallback(
+    node => dispatch({ type: 'removeNode', node }),
+    []
+  );
   const removeConnection = React.useCallback(
     connection => dispatch({ type: 'removeConnection', connection }),
     []
@@ -58,7 +62,7 @@ export const Workflow: FunctionComponent<WorkflowProps> = ({
 
   return (
     <div id="workflow-container" className={styles.CanvasContainer}>
-      {render && render(addNode, saveWorkflow)}
+      {render && render(addNode, saveWorkflow, updateNode, removeNode, state.selectedNode)}
       <Canvas
         nodes={state.nodes}
         updateNode={updateNode}

@@ -1,14 +1,12 @@
 import isEqual from 'lodash/isEqual';
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import { connect } from 'react-redux';
-// import { selectNode } from 'ReduxState/actions';
-import Icon from '../Icon/Icon';
 import { Node, Point } from '../Models';
 import EventManager from '../Util/EventManager.js';
-import styles from './Node.module.css';
 import { NodeTitle } from './NodeTitle';
-import { InPort, OutPort } from './Ports';
+import { Shape } from './Shape';
+import { ShapeEnd } from './ShapeEnd';
+import { ShapeStart } from './ShapeStart';
 
 type Props = {
   node: Node;
@@ -113,83 +111,34 @@ class NodeComponent extends React.Component<Props> {
       unselected = this.props.selectedNode.id !== this.props.node.id;
     }
 
-    let nodeClass = styles.normal;
-    let nodeOutline = styles.normalOutline;
-    let nodeIconClass = styles.normalIcon;
-
-    if (unselected) {
-      nodeClass = styles.unselected;
-      nodeOutline = styles.unselectedOutline;
-      nodeIconClass = styles.unselectedIcon;
-    }
-
-    if (selected) {
-      nodeClass = styles.selected;
-      nodeOutline = styles.selectedOutline;
-      nodeIconClass = styles.selectedIcon;
-    }
-
     let dragStyle = {
       cursor: 'inherit'
     };
 
-    if (this.dragging) {
-      nodeClass += ' ' + styles.nocursor;
-      nodeIconClass += ' ' + styles.nocursor;
+    let ShapeComponent = Shape;
+    if (this.props.node.id === 'START') {
+      ShapeComponent = ShapeStart;
     }
-
-    const w = 80;
-    const h = 79;
-    const scale = this.props.node.scale;
+    if (this.props.node.id === 'END') {
+      ShapeComponent = ShapeEnd;
+    }
 
     return (
       <g id="Node" transform={this.getTransform()} style={dragStyle}>
-        {/* <g id="Hexgons" transform="translate(-40.000000, -39.500000) "> */}
-        <g
-          id="Hexgons"
-          transform={`translate(-${(w * scale) / 2}, -${(h * scale) /
-            2}) scale(${scale})`}
-        >
-          <polygon
-            className={nodeOutline}
-            strokeWidth="1"
-            points="40 0 74.6410162 19.75 74.6410162 59.25 40 79 5.35898385 59.25 5.35898385 19.75"
-          />
-          <polygon
-            className={nodeClass}
-            points="40 5 70.3108891 22.25 70.3108891 56.75 40 74 9.68911087 56.75 9.68911087 22.25"
-          />
-        </g>
-
-        {/* <circle
-          fill="none" stroke="#999"
-          cx={0 }
-          cy={0 }
-          r="50"
-        /> */}
-
-        <Icon
-          icon={this.props.node.icon}
-          className={nodeIconClass}
-          size={28 * scale}
+        <ShapeComponent
+          node={this.props.node}
+          selected={selected}
+          unselected={unselected}
+          // @ts-ignore
+          dragging={this.dragging}
+          onConnectionDrag={this.props.onConnectionDrag}
+          onConnectionEnd={this.props.onConnectionEnd}
+          connectionCandidate={this.props.connectionCandidate}
         />
-
-        <g id="Ports" transform={`translate(${0},${0})`}>
-          <OutPort
-            node={this.props.node}
-            onConnectionDrag={this.props.onConnectionDrag}
-            onConnectionEnd={this.props.onConnectionEnd}
-            unselected={unselected}
-          />
-          <InPort
-            node={this.props.node}
-            highlight={this.props.connectionCandidate}
-            unselected={unselected}
-          />
-        </g>
         <NodeTitle node={this.props.node} unselected={unselected} />
       </g>
     );
   }
 }
+
 export default NodeComponent;
