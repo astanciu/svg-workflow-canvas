@@ -70,7 +70,7 @@ class Canvas extends React.Component<CanvasProps> {
       height: window.innerHeight - 56,
       x: window.innerWidth / 2,
       y: (window.innerHeight - 56) / 2,
-      scale: 1
+      scale: 1.5
     };
 
     this.setState({ view });
@@ -89,6 +89,7 @@ class Canvas extends React.Component<CanvasProps> {
     this.em.onPinch(this._onPinch);
     setTimeout(() => {
       this.setState({ visibility: 'visible' });
+      this.zoomie();
     }, 100);
   }
 
@@ -183,6 +184,23 @@ class Canvas extends React.Component<CanvasProps> {
 
     this.friction = 0.85;
     this.animationFrame = requestAnimationFrame(this.glideCanvas.bind(this));
+  };
+
+  zoomie = () => {
+    const ease = t => t * (2-t)
+    const start = 1.5
+    const end = 0.8
+    const duration = 25 // animation frames
+    const t = this.animationFrame || 1;
+    let scale = this.state.view.scale;
+    if (scale <= end) {
+      return cancelAnimationFrame(this.animationFrame || 0);
+    }
+    const view = this.state.view;
+    const delta = (end - start) * ease(t / duration)
+    view.scale = start + delta;
+    this.setState({ view });
+    this.animationFrame = requestAnimationFrame(this.zoomie.bind(this));
   };
 
   glideCanvas = () => {

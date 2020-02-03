@@ -37,7 +37,6 @@ class NodeComponent extends React.Component<Props> {
     this.em.onTap(this._onTap);
     this.em.onMove(this._onMove);
 
-    // if (this.props.snapToGrid) this.em.onMoveEnd(this._onMoveEnd);
     this.em.onMoveEnd(this._onMoveEnd);
     this.snapToGrid();
   }
