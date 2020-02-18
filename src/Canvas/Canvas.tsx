@@ -81,6 +81,9 @@ class Canvas extends React.Component<CanvasProps> {
     this.setView();
     this.setCanvasSize();
     window.addEventListener('resize', this.setCanvasSize);
+    window.addEventListener('orientationchange', () => {
+      setTimeout(this.setCanvasSize, 300);
+    });
 
     this.em = new EventManager(this.domNode.current);
     this.em.onTap(this._onTap);
@@ -96,6 +99,7 @@ class Canvas extends React.Component<CanvasProps> {
   componentWillUnmount() {
     this.setCanvasSize.cancel();
     window.removeEventListener('resize', this.setCanvasSize);
+    this.em.setdown();
   }
 
   setCanvasSize = debounce(() => {
@@ -187,17 +191,17 @@ class Canvas extends React.Component<CanvasProps> {
   };
 
   zoomie = () => {
-    const ease = t => t * (2-t)
-    const start = 1.5
-    const end = 0.8
-    const duration = 25 // animation frames
+    const ease = t => t * (2 - t);
+    const start = 2;
+    const end = 1;
+    const duration = 15; // animation frames
     const t = this.animationFrame || 1;
     let scale = this.state.view.scale;
     if (scale <= end) {
       return cancelAnimationFrame(this.animationFrame || 0);
     }
     const view = this.state.view;
-    const delta = (end - start) * ease(t / duration)
+    const delta = (end - start) * ease(t / duration);
     view.scale = start + delta;
     this.setState({ view });
     this.animationFrame = requestAnimationFrame(this.zoomie.bind(this));
@@ -328,6 +332,27 @@ class Canvas extends React.Component<CanvasProps> {
         ref={this.domNode}
         style={{ visibility: this.state.visibility } as CSSProperties}
       >
+        <defs>
+          <radialGradient
+            cx="10.7991175%"
+            cy="11.7361177%"
+            fx="10.7991175%"
+            fy="11.7361177%"
+            r="148.107834%"
+            gradientTransform="translate(0.107991,0.117361),scale(0.750000,1.000000),rotate(36.579912),translate(-0.107991,-0.117361)"
+            id="canvasGradient"
+          >
+            <stop stop-color="#EFEFEF" offset="0%"></stop>
+            <stop stop-color="#CCCCCC" offset="100%"></stop>
+          </radialGradient>
+        </defs>
+        <rect
+          x="0"
+          y="0"
+          width="100%"
+          height="100%"
+          style={{ fill: 'url(#canvasGradient)' }}
+        />
         <g id="Canvas" transform={this.getTransform()}>
           <Grid />
           {connections}
