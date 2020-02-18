@@ -41,6 +41,10 @@ class NodeComponent extends React.Component<Props> {
     this.snapToGrid();
   }
 
+  componentWillUnmount() {
+    this.em.setdown();
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     const sameProps = isEqual(nextProps, this.props);
     const sameState = isEqual(nextState, this.state);
@@ -59,7 +63,7 @@ class NodeComponent extends React.Component<Props> {
     e.stopPropagation();
     this.dragging = true;
 
-    const node = new Node(this.props.node);
+    const node = this.props.node.clone();
     const scaleFactor =
       (this.props.canvasView && this.props.canvasView.scale) || 1;
     node.position = new Point(
