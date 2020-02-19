@@ -33,7 +33,7 @@ class NodeComponent extends React.Component<Props> {
   componentDidMount() {
     this.domNode = ReactDOM.findDOMNode(this);
 
-    this.em = new EventManager(this.domNode);
+    this.em = new EventManager(this.domNode as Element);
     this.em.onTap(this._onTap);
     this.em.onMove(this._onMove);
 

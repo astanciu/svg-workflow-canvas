@@ -85,7 +85,7 @@ class Canvas extends React.Component<CanvasProps> {
       setTimeout(this.setCanvasSize, 300);
     });
 
-    this.em = new EventManager(this.domNode.current);
+    this.em = new EventManager(this.domNode.current!);
     this.em.onTap(this._onTap);
     this.em.onMove(this._onMove);
     this.em.onMoveEnd(this._onMoveEnd);
@@ -233,7 +233,7 @@ class Canvas extends React.Component<CanvasProps> {
     this.animationFrame = requestAnimationFrame(this.glideCanvas.bind(this));
   };
 
-  onConnectionDrag = (node: Node, e) => {
+  onConnectionDrag = (node: Node, e:CustomEvent) => {
     const mousePosition = this.convertCoordsToSVG(
       e.detail.x - this.state.view.offsetLeft!,
       e.detail.y - this.state.view.offsetTop!
@@ -247,6 +247,16 @@ class Canvas extends React.Component<CanvasProps> {
           : mousePosition
       }
     }));
+  };
+
+  onConnectionEnd = (node: Node) => {
+    if (this.state.closestNode) {
+      this.props.createConnection(node, this.state.closestNode);
+    }
+    this.setState({
+      connectionInProgress: null,
+      closestNode: undefined
+    });
   };
 
   setClosestNode = (mouse: Point): void => {
@@ -282,16 +292,6 @@ class Canvas extends React.Component<CanvasProps> {
     }
 
     return closestNode;
-  };
-
-  onConnectionEnd = (node: Node) => {
-    if (this.state.closestNode) {
-      this.props.createConnection(node, this.state.closestNode);
-    }
-    this.setState({
-      connectionInProgress: null,
-      closestNode: undefined
-    });
   };
 
   render() {

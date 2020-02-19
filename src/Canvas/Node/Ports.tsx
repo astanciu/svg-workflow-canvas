@@ -43,7 +43,7 @@ export const OutPort = React.memo(
     let nodeRef = useRef(node);
 
     useEffect(() => {
-      const em = new EventManager(nodeDomRef.current, nodeRef.current);
+      const em = new EventManager(nodeDomRef.current!);
       em.onMove(e => {
         e.stopPropagation();
         onConnectionDrag(nodeRef.current, e);

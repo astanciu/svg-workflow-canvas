@@ -23,13 +23,13 @@ const ConnectionComponent = ({
 
   // This effect runs only first time
   useEffect(() => {
-    const connectionEM = new EventManager(connectionDom.current);
+    const connectionEM = new EventManager(connectionDom.current!);
     connectionEM.onTap(e => {
       e.stopPropagation();
       selectConnection(connectionRef.current);
     });
 
-    const closeButtonEM = new EventManager(closeDom.current);
+    const closeButtonEM = new EventManager(closeDom.current!);
     closeButtonEM.onTap(e => {
       e.stopPropagation();
       removeConnection(connectionRef.current);
