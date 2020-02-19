@@ -138,7 +138,9 @@ class NodeComponent extends React.Component<Props> {
           onConnectionEnd={this.props.onConnectionEnd}
           connectionCandidate={this.props.connectionCandidate}
         />
-        <NodeTitle node={this.props.node} unselected={unselected} />
+        {this.props.canvasView.scale > 0.7 && (
+          <NodeTitle node={this.props.node} unselected={unselected} />
+        )}
       </g>
     );
   }

@@ -1,6 +1,7 @@
-/* Normal  */
+@import '../styles/variables';
+
 .normal {
-  fill: #34373c;
+  fill: $node-bg;
   cursor: pointer;
   stroke: none;
   transition: fill 0.05s linear;
@@ -13,7 +14,7 @@
 }
 
 .normalIcon {
-  fill: #d1d7e4;
+  fill: $node-icon;
   stroke: none;
   cursor: pointer;
 }
@@ -21,7 +22,7 @@
 /* Selected */
 .selected {
   composes: normal;
-  fill: #24272b;
+  fill: $node-selected-bg; //#24272b;
   stroke: none;
 }
 
@@ -44,7 +45,7 @@
 /* UnSelected */
 .unselected {
   composes: normal;
-  fill: #b5b5b5;
+  fill: $node-unselected-bg; //#b5b5b5;
   stroke: none;
 }
 
@@ -65,15 +66,25 @@
 /* Specials */
 .start {
   composes: normal;
-  fill: #e15aa6;
+  fill: $magenta;
 }
 .end {
   composes: normal;
-  fill: #9fcc00;
+  fill: $green;
 }
 
 .specialIcon {
   composes: normalIcon;
   fill: #eceff4
+}
+
+.unselectedStart {
+  composes: normal;
+  fill: mix($magenta, $background, 25%);
+}
+
+.unselectedEnd {
+  composes: normal;
+  fill: mix($green, $background, 25%);
 }
 

@@ -1,21 +1,28 @@
 import React, { FunctionComponent } from 'react';
 import Icon from '../Icon/Icon';
 import { Node } from '../Models/Node';
-import styles from './Node.module.css';
+import styles from './Node.module.scss';
 import { InPort, OutPort } from './Ports';
-
 
 export type ShapeProps = {
   node: Node;
   selected: boolean;
   unselected: boolean;
   dragging: boolean;
-  onConnectionDrag: ()=>void;
-  onConnectionEnd: ()=>void;
+  onConnectionDrag: () => void;
+  onConnectionEnd: () => void;
   connectionCandidate: boolean;
 };
 
-export const Shape: FunctionComponent<ShapeProps> = ({ node, selected, unselected, dragging, onConnectionDrag, onConnectionEnd, connectionCandidate }) => {
+export const Shape: FunctionComponent<ShapeProps> = ({
+  node,
+  selected,
+  unselected,
+  dragging,
+  onConnectionDrag,
+  onConnectionEnd,
+  connectionCandidate
+}) => {
   let nodeClass = styles.normal;
   let nodeOutline = styles.normalOutline;
   let nodeIconClass = styles.normalIcon;
@@ -44,22 +51,18 @@ export const Shape: FunctionComponent<ShapeProps> = ({ node, selected, unselecte
         transform={`translate(-${(node.width * node.scale) /
           2}, -${(node.height * node.scale) / 2}) scale(${node.scale})`}
       >
-        <polygon
+        {/* {selected && <polygon
           className={nodeOutline}
           strokeWidth="1"
           points="40 0 74.6410162 19.75 74.6410162 59.25 40 79 5.35898385 59.25 5.35898385 19.75"
-        />
+        />} */}
         <polygon
           className={nodeClass}
           points="40 5 70.3108891 22.25 70.3108891 56.75 40 74 9.68911087 56.75 9.68911087 22.25"
         />
       </g>
 
-      <Icon
-        icon={node.icon}
-        className={nodeIconClass}
-        size={28 * node.scale}
-      />
+      <Icon icon={node.icon} className={nodeIconClass} size={28 * node.scale} />
 
       <g id="Ports" transform={`translate(${0},${0})`}>
         <OutPort

@@ -342,8 +342,8 @@ class Canvas extends React.Component<CanvasProps> {
             gradientTransform="translate(0.107991,0.117361),scale(0.750000,1.000000),rotate(36.579912),translate(-0.107991,-0.117361)"
             id="canvasGradient"
           >
-            <stop stop-color="#EFEFEF" offset="0%"></stop>
-            <stop stop-color="#CCCCCC" offset="100%"></stop>
+            <stop stopColor="#EFEFEF" offset="0%"></stop>
+            <stop stopColor="#CCCCCC" offset="100%"></stop>
           </radialGradient>
         </defs>
         <rect
@@ -354,7 +354,7 @@ class Canvas extends React.Component<CanvasProps> {
           style={{ fill: 'url(#canvasGradient)' }}
         />
         <g id="Canvas" transform={this.getTransform()}>
-          <Grid />
+          <Grid show={true}/>
           {connections}
           {this.state.connectionInProgress && (
             <ConnectionPreview

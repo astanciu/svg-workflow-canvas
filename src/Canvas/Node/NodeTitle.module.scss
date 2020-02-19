@@ -1,0 +1,40 @@
+@import '../styles/variables';
+
+$text-color: #464a53;
+$label-color: mix($primary-color, $background, 15%);
+
+.Title {
+  font-family: 'Fira Code', monospace;
+  font-size: 12px;
+  fill: $text-color;
+  font-weight: normal;
+  // paint-order: stroke fill;
+  // stroke: rgba(231, 235, 238, 1);
+  // stroke-width: 2;
+}
+
+.TitleHack {
+  stroke-width: 4;
+}
+
+.UnselectedTitle {
+  font-family: 'Fira Code', monospace;
+  font-size: 12px;
+  fill: mix($text-color, $label-color, 30%);
+  font-weight: normal;
+}
+.Description {
+  font-family: 'Fira Code', monospace;
+  font-size: 11px;
+  fill: #34373c;
+  font-weight: normal;
+  inline-size: 50px;
+}
+
+.label {
+  fill: $label-color;
+}
+
+.unselectedLabel {
+  fill:  change-color($label-color, $alpha: 0);
+}

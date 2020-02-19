@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Grid.module.css';
 
-export default () => {
+export default ({ show }) => {
   const SIZE = 100000;
   const SMALL_SPACING = 50;
   const BIG_SPACING = 250;
@@ -36,6 +36,10 @@ export default () => {
       </pattern>
     </React.Fragment>
   );
+
+  if (!show) {
+    return null;
+  }
 
   return (
     <g id="Grid" className="grid">
