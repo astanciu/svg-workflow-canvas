@@ -1,7 +1,5 @@
 // @ts-nocheck
 
-import { listen, multitouch } from 'popmotion';
-
 export default class EventManager {
   constructor(element, data?) {
     this.el = element;
@@ -12,7 +10,7 @@ export default class EventManager {
       tap: [],
       move: [],
       moveEnd: [],
-      pinch: [],
+      pinch: []
     };
     this.isClick = false;
     this.isDragging = false;
@@ -21,6 +19,10 @@ export default class EventManager {
     this.setup();
     this._mousemove = this._mousemove.bind(this);
     this._mouseup = this._mouseup.bind(this);
+    this.currentTouches = [];
+    this.scale = 1;
+    this.previousScale = 1;
+    this.previousCenter = undefined;
   }
 
   setup = () => {
@@ -39,35 +41,133 @@ export default class EventManager {
     }
   };
 
-  setupPinch = () => {
-    listen(this.el, 'touchstart').start((e) => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      multitouch({ scale: this.scale || 1, preventDefault: true })
-        .filter(({ touches }) => touches.length === 2)
-        .start(({ touches, scale, rotate }) => {
-          this.zooming = true;
-          const center = {
-            x: (touches[0].x + touches[1].x) / 2,
-            y: (touches[0].y + touches[1].y) / 2,
-          };
-
-          this.scale = scale;
-          const customEvent = new CustomEvent('move', {
-            detail: {
-              x: center.x,
-              y: center.y,
-              scale,
-            },
-          });
-
-          this.callHandler('pinch', customEvent);
-        });
-    });
+  _setStartDistance = () => {
+    if (this.currentTouches.length >= 2) {
+      const [first, second] = this.currentTouches;
+      this.startDistance = this._distance(first, second);
+    }
   };
 
-  debugEvent = (e) => {
+  _pinchStart = e => {
+    e.preventDefault();
+    const touches = e.changedTouches;
+    for (const touch of touches) {
+      // console.log(`START: ${touch.identifier}`);
+      const { identifier, pageX, pageY } = touch;
+      this.currentTouches.push({ identifier, pageX, pageY });
+    }
+    this._setStartDistance();
+  };
+
+  _pinchEnd = e => {
+    e.preventDefault();
+
+    for (const finishedTouch of e.changedTouches) {
+      // console.log(`END: ${finishedTouch.identifier}`);
+      const idx = this.currentTouches.findIndex(
+        t => t.identifier === finishedTouch.identifier
+      );
+
+      if (idx == -1) return;
+      this.currentTouches.splice(idx, 1);
+    }
+    this._setStartDistance();
+    if (this.currentTouches.length < 2) {
+      this.previousScale = this.scale;
+    }
+    this.previousCenter = undefined;
+  };
+
+  _pinchCancel = e => {
+    e.preventDefault();
+    // for (const finishedTouch of e.changedTouches) {
+    //   console.log(`CANCELLED: ${finishedTouch.identifier}`);
+    //   // const idx = this.currentTouches.findIndex(
+    //   //   t => t.identifier === finishedTouch.identifier
+    //   // );
+    //   // this.currentTouches.splice(idx, 1);
+    // }
+    // // this._setStartDistance();
+    // // if (this.currentTouches.length < 2) {
+    // //   this.previousScale = this.scale;
+    // // }
+    // // this.previousCenter = undefined;
+  };
+
+  _pinchMove = e => {
+    e.preventDefault();
+    if (e.changedTouches.length < 2) {
+      return;
+    }
+
+    const touches = Array.from(e.touches);
+    const first = touches.find(
+      t => t.identifier === this.currentTouches[0].identifier
+    );
+    const second = touches.find(
+      t => t.identifier === this.currentTouches[1].identifier
+    );
+
+    // console.log(`1: ${first.identifier}: (${first.clientX}x${first.clientY}  -  ${second.identifier}: (${second.clientX}x${second.clientY})`);
+    // console.log(`2: ${first.identifier}: (${first.clientX}x${first.clientY}  -  ${second.identifier}: (${second.clientX}x${second.clientY})`);
+    const newDistance = this._distance(first, second);
+
+    this.scale = (this.previousScale * newDistance) / this.startDistance;
+
+    const center = {
+      x: (first.pageX + second.pageX) / 2,
+      y: (first.pageY + second.pageY) / 2
+    };
+
+    if (!this.previousCenter) {
+      this.previousCenter = center;
+    }
+
+    const obj = {
+      detail: {
+        x: center.x,
+        y: center.y,
+        scale: this.scale,
+        delta: {
+          x: center.x - this.previousCenter.x,
+          y: center.y - this.previousCenter.y
+        }
+      }
+    };
+
+    const customEvent = new CustomEvent('pinch', obj);
+    this.callHandler('pinch', customEvent);
+
+    this.previousCenter = center;
+  };
+
+  setupPinch = () => {
+    this.el.addEventListener('touchstart', this._pinchStart.bind(this));
+    this.el.addEventListener('touchend', this._pinchEnd.bind(this));
+    this.el.addEventListener('touchcancel', this._pinchCancel.bind(this));
+    this.el.addEventListener('touchmove', this._pinchMove.bind(this));
+  };
+
+  _distance = (obj1, obj2) => {
+    if (!obj1) throw new Error('Missing obj1');
+    if (!obj2) throw new Error('Missing obj2');
+    const first = {
+      x: obj1.pageX ?? obj1.x,
+      y: obj1.pageY ?? obj1.y
+    };
+    const second = {
+      x: obj2.pageX ?? obj2.x,
+      y: obj2.pageY ?? obj2.y
+    };
+    const a = Math.abs(first.x - second.x);
+    const b = Math.abs(first.y - second.y);
+    const d = Math.sqrt(a ** 2 + b ** 2);
+
+    if (isNaN(d)) debugger;
+    return d
+  };
+
+  debugEvent = e => {
     if (this.debug) console.log(`${this.name} : ${e.type}`, e);
   };
 
@@ -80,15 +180,19 @@ export default class EventManager {
       if (this.data) {
         event.data = this.data;
       }
-      this.handlers[eventName].forEach((fn) => fn(event));
+      this.handlers[eventName].forEach(fn => fn(event));
     }
   };
 
-  getEvent = (e) => {
+  getEvent = e => {
     if (e.targetTouches) {
-      let event = Array.from(e.touches).find((t) => t.identifier === this.touchId);
+      let event = Array.from(e.touches).find(
+        t => t.identifier === this.touchId
+      );
       if (!event) {
-        event = Array.from(e.changedTouches).find((t) => t.identifier === this.touchId);
+        event = Array.from(e.changedTouches).find(
+          t => t.identifier === this.touchId
+        );
       }
       return event;
     } else {
@@ -96,7 +200,7 @@ export default class EventManager {
     }
   };
 
-  _mousedown = (event) => {
+  _mousedown = event => {
     event.preventDefault();
     event.stopPropagation();
     this.debugEvent(event);
@@ -115,10 +219,12 @@ export default class EventManager {
 
     this.mouseDown = true;
     this.isClick = true;
-    this.touchId = event.changedTouches ? event.changedTouches[0].identifier : undefined;
+    this.touchId = event.changedTouches
+      ? event.changedTouches[0].identifier
+      : undefined;
   };
 
-  _mousemove = (rawEvent) => {
+  _mousemove = rawEvent => {
     rawEvent.preventDefault();
     rawEvent.stopPropagation();
     if (rawEvent.touches && rawEvent.touches.length > 1) return;
@@ -137,13 +243,17 @@ export default class EventManager {
 
     this.delta = {
       x: event.pageX - this.prevLoc.x,
-      y: event.pageY - this.prevLoc.y,
+      y: event.pageY - this.prevLoc.y
     };
 
     // If we're not already dragging and the delta is 0 or 1, treat as possible click
     // (isClick evaluates on mouseUp, so it could be reset if mouse moves a bit more
     //  and delta increases)
-    if (!this.isDragging && Math.abs(this.delta.x) <= 1 && Math.abs(this.delta.y) <= 1) {
+    if (
+      !this.isDragging &&
+      Math.abs(this.delta.x) <= 1 &&
+      Math.abs(this.delta.y) <= 1
+    ) {
       this.isClick = true;
       return;
     }
@@ -160,8 +270,8 @@ export default class EventManager {
       detail: {
         x: event.pageX,
         y: event.pageY,
-        delta: this.delta,
-      },
+        delta: this.delta
+      }
     });
 
     this.prevLoc = { x: event.pageX, y: event.pageY };
@@ -170,7 +280,7 @@ export default class EventManager {
     this.callHandler('move', customEvent);
   };
 
-  _mouseup = (rawEvent) => {
+  _mouseup = rawEvent => {
     rawEvent.preventDefault();
     rawEvent.stopPropagation();
 
@@ -190,15 +300,17 @@ export default class EventManager {
     this.mouseDown = false;
     this.prevLoc = null;
 
-    const event = rawEvent.changedTouches ? rawEvent.changedTouches[0].identifier : rawEvent;
+    const event = rawEvent.changedTouches
+      ? rawEvent.changedTouches[0].identifier
+      : rawEvent;
 
     // This was a click, trigger 'tap'
     if (this.isClick) {
       const customEvent = new CustomEvent('tap', {
         detail: {
           x: event.pageX,
-          y: event.pageY,
-        },
+          y: event.pageY
+        }
       });
       this.callHandler('tap', customEvent);
     }
@@ -210,8 +322,8 @@ export default class EventManager {
           x: event.pageX,
           y: event.pageY,
           delta: this.delta,
-          rawEvent: event,
-        },
+          rawEvent: event
+        }
       });
       this.callHandler('moveEnd', customEvent);
     }
@@ -221,19 +333,19 @@ export default class EventManager {
     this.isDragging = false;
   };
 
-  onTap = (fn) => {
+  onTap = fn => {
     this.addHandler('tap', fn);
   };
 
-  onMove = (fn) => {
+  onMove = fn => {
     this.addHandler('move', fn);
   };
 
-  onMoveEnd = (fn) => {
+  onMoveEnd = fn => {
     this.addHandler('moveEnd', fn);
   };
 
-  onPinch = (fn) => {
+  onPinch = fn => {
     this.setupPinch();
     this.addHandler('pinch', fn);
   };
