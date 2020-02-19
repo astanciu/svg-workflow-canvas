@@ -1,6 +1,6 @@
 import React from 'react';
 import { Node, Point } from '../Models';
-import styles from './Connections.module.css';
+import styles from './Connections.module.scss';
 import { makeSVGPath } from './util';
 
 type Props = {

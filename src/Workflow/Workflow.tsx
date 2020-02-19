@@ -2,7 +2,7 @@ import React, { FunctionComponent, useEffect } from 'react';
 import Canvas from '../Canvas/Canvas';
 import { WorkflowProps } from './Types';
 import { useWorkflow } from './useWorkflow';
-import styles from './Workflow.module.css';
+import styles from './Workflow.module.scss';
 import { WorkflowData } from './WorkflowData';
 export const WorkflowContext = React.createContext(null);
 

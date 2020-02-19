@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Connection } from '../Models';
 import EventManager from '../Util/EventManager';
-import styles from './Connections.module.css';
+import styles from './Connections.module.scss';
 import { findPointOnCurve, makeSVGPath } from './util'; // Merge with Util?
 
 type Props = {
@@ -72,6 +72,12 @@ const ConnectionComponent = ({
       <path d={path} className={styles.ConnectionHitBox} />
       <path d={path} className={className} strokeWidth={`${3 * scale}px`} />
       <g ref={closeDom} display={selected ? '' : 'none'}>
+        <circle
+          className={styles.CloseHitbox}
+          cx={center.x}
+          cy={center.y}
+          r={12}
+        />
         <circle
           className={styles.CloseOutline}
           cx={center.x}

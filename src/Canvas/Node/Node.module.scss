@@ -1,5 +1,8 @@
 @import '../styles/variables';
 
+$node-selected-bg: adjust-color($node-bg, $lightness: -10%);  //95999e
+$node-unselected-bg: mix($node-bg, $background, 25%);  //95999e
+
 .normal {
   fill: $node-bg;
   cursor: pointer;

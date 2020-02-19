@@ -1,6 +1,6 @@
 import debounce from 'lodash/debounce';
 import React, { CSSProperties } from 'react';
-import styles from './Canvas.module.css';
+import styles from './Canvas.module.scss';
 import ConnectionComponent from './Connections/ConnectionComponent';
 import ConnectionPreview from './Connections/ConnectionPreview';
 import Grid from './Grid/Grid';
@@ -172,6 +172,7 @@ class Canvas extends React.Component<CanvasProps> {
 
   _onPinch = e => {
     const center = { x: e.detail.x, y: e.detail.y };
+    this._onMove(e);
     this.setScale(e.detail.scale, center);
   };
 
@@ -260,7 +261,7 @@ class Canvas extends React.Component<CanvasProps> {
   getClosestInPortNode = (loc: Point): Node | undefined => {
     const { nodes } = this.props;
 
-    const minDist: number = 30;
+    const minDist: number = 60;
     let closestNode: Node | undefined;
     let closestDist: number;
 

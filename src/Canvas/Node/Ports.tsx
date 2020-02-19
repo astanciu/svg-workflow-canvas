@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Node } from '../Models';
 import EventManager from '../Util/EventManager';
-import styles from './Port.module.css';
+import styles from './Port.module.scss';
 
 type InPortProps = {
   node: Node;

@@ -1,6 +1,11 @@
+@import '../styles/variables';
+
+$fill: $lines; //#8a939a;
+$outline: $fill; //#4b5056;
+
 .Port {
-  fill: #8a939a;
-  stroke: #4b5056;
+  fill: $fill;
+  stroke: $outline;
   cursor: pointer;
   stroke-width: 3;
 }
@@ -13,8 +18,8 @@
 
 .PortUnselected {
   composes: Port;
-  fill: #dfe5e8;
-  stroke: #c8c8c8;
+  fill:  mix($fill, $background, 30%); //#dfe5e8;
+  stroke: mix($outline, $background, 30%); //#c8c8c8;
 }
 
 .PortHitBox {

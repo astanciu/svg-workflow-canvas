@@ -1,3 +1,8 @@
+@import '../styles/variables';
+
+$stroke: $lines; //#8a939a;;
+$strokeUnselected: mix($stroke, $background, 25%);
+
 .previewConnection {
   stroke: #8a939a;
   stroke-dasharray: 10;
@@ -6,7 +11,7 @@
 }
 
 .Connection {
-  stroke: #8a939a;
+  stroke: $stroke;
   fill: none;
   cursor: pointer;
 }
@@ -16,13 +21,13 @@
 }
 .ConnectionUnselected {
   composes: Connection;
-  stroke: #d7d7da;
+  stroke: $strokeUnselected; // #d7d7da;
 }
 
 .ConnectionHitBox {
   composes: Connection;
   stroke: #ffffff00;
-  stroke-width: 16px;
+  stroke-width: 24px;
 }
 
 .Close {
@@ -35,7 +40,11 @@
   stroke-width: 1;
   stroke: #ff0000;
 }
-
+.CloseHitbox {
+  fill: #ff00ff00;
+  stroke-width: 24;
+  stroke: #ff00ff00;
+}
 .CloseX {
   fill: #ffffff;
   cursor: pointer;

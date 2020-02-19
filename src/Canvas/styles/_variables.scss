@@ -4,12 +4,7 @@ $green: #9fcc00;
 $magenta: #e15aa6;
 
 $node-bg: $primary-color;
-
-
-$node-selected-bg: adjust-color($primary-color, $lightness: -10%);  //95999e
-// $node-unselected-bg: adjust-color($primary-color, $lightness: +30%);  //95999e
-// $node-unselected-bg: adjust-color($primary-color, $alpha: -.7);  //95999e
-$node-unselected-bg: mix($primary-color, $background, 25%);  //95999e
+$lines: mix($node-bg, $background, 50%);
 
 
 $node-icon: #d1d7e4;

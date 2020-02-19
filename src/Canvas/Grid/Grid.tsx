@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './Grid.module.css';
+import styles from './Grid.module.scss';
 
 export default ({ show }) => {
   const SIZE = 100000;
