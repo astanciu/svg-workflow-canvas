@@ -8,14 +8,13 @@ $icon-on: #9fcc00;
 
 .Group {
   position: absolute;
-  width: 100px;
-  min-height: 400px;
   bottom: 1px;
-  right: 1px;
+  left: 1px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
+  margin-bottom: 10px;
 }
 
 .Button {
@@ -23,7 +22,7 @@ $icon-on: #9fcc00;
   height: 40px;
   background-color: $bg;
   border-radius: 3px;
-  margin: 10px;
+  margin: 10px 20px;
   display: flex;
   align-items: center;
   justify-content: center;
