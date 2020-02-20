@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/svg-workflow-canvas/static/css/main.31c6df13.chunk.css",
-    "main.js": "/svg-workflow-canvas/static/js/main.5df06b6c.chunk.js",
-    "main.js.map": "/svg-workflow-canvas/static/js/main.5df06b6c.chunk.js.map",
+    "main.css": "/svg-workflow-canvas/static/css/main.e9008764.chunk.css",
+    "main.js": "/svg-workflow-canvas/static/js/main.0fd9a2da.chunk.js",
+    "main.js.map": "/svg-workflow-canvas/static/js/main.0fd9a2da.chunk.js.map",
     "runtime-main.js": "/svg-workflow-canvas/static/js/runtime-main.3853032e.js",
     "runtime-main.js.map": "/svg-workflow-canvas/static/js/runtime-main.3853032e.js.map",
-    "static/js/2.a817b60d.chunk.js": "/svg-workflow-canvas/static/js/2.a817b60d.chunk.js",
-    "static/js/2.a817b60d.chunk.js.map": "/svg-workflow-canvas/static/js/2.a817b60d.chunk.js.map",
+    "static/js/2.3335cb10.chunk.js": "/svg-workflow-canvas/static/js/2.3335cb10.chunk.js",
+    "static/js/2.3335cb10.chunk.js.map": "/svg-workflow-canvas/static/js/2.3335cb10.chunk.js.map",
     "index.html": "/svg-workflow-canvas/index.html",
-    "precache-manifest.f4bdffea62436fe9bbf78d012953a1a0.js": "/svg-workflow-canvas/precache-manifest.f4bdffea62436fe9bbf78d012953a1a0.js",
+    "precache-manifest.661ddc0ed782602f280e30391673d613.js": "/svg-workflow-canvas/precache-manifest.661ddc0ed782602f280e30391673d613.js",
     "service-worker.js": "/svg-workflow-canvas/service-worker.js",
-    "static/css/main.31c6df13.chunk.css.map": "/svg-workflow-canvas/static/css/main.31c6df13.chunk.css.map",
-    "static/js/2.a817b60d.chunk.js.LICENSE": "/svg-workflow-canvas/static/js/2.a817b60d.chunk.js.LICENSE"
+    "static/css/main.e9008764.chunk.css.map": "/svg-workflow-canvas/static/css/main.e9008764.chunk.css.map",
+    "static/js/2.3335cb10.chunk.js.LICENSE": "/svg-workflow-canvas/static/js/2.3335cb10.chunk.js.LICENSE"
   },
   "entrypoints": [
     "static/js/runtime-main.3853032e.js",
-    "static/js/2.a817b60d.chunk.js",
-    "static/css/main.31c6df13.chunk.css",
-    "static/js/main.5df06b6c.chunk.js"
+    "static/js/2.3335cb10.chunk.js",
+    "static/css/main.e9008764.chunk.css",
+    "static/js/main.0fd9a2da.chunk.js"
   ]
 }
