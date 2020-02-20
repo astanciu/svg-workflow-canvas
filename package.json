@@ -1,6 +1,6 @@
 {
   "name": "svg-workflow-canvas",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Generic workflow builder react component using an SVG canvas",
   "keywords": [
     "workflow",
