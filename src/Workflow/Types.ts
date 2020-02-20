@@ -15,6 +15,7 @@ export type WorkflowProps = {
   workflowChanged?: (workflow) => any;
   scale?: number;
   snapToGrid?: boolean;
+  showGrid?: boolean;
   render?: (add, save, updateNode, removeNode, selectedNode:Node|null) => void;
 };
 

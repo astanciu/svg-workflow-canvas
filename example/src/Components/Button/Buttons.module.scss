@@ -1,0 +1,59 @@
+$bg: #b3b3b3;
+$bg-off: #a3a3ac;
+$bg-on: #484867;
+
+$icon: #616a74;
+$icon-off: #cfcfcf;
+$icon-on: #9fcc00;
+
+.Group {
+  position: absolute;
+  width: 100px;
+  min-height: 400px;
+  bottom: 1px;
+  right: 1px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.Button {
+  width: 40px;
+  height: 40px;
+  background-color: $bg;
+  border-radius: 3px;
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  &:hover {
+    background-color: darken($bg, $amount: 5%);
+  }
+}
+
+.ToggleButtonOff {
+  @extend .Button;
+  background-color: $bg-off;
+  &:hover {
+    background-color: darken($bg-off, $amount: 5%);
+  }
+}
+.ToggleButtonOn {
+  @extend .ToggleButtonOff;
+  background-color: $bg-on;
+  &:hover {
+    background-color: darken($bg-on, $amount: 5%);
+  }
+}
+.Icon {
+  fill: $icon;
+}
+.IconOn {
+  fill: $icon-on;
+}
+.IconOff {
+  fill: $icon-off;
+}

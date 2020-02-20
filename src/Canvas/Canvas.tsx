@@ -41,6 +41,7 @@ type CanvasProps = {
   createConnection: (fromNode: Node, toNode: Node) => void;
   removeConnection: (conn: Connection) => void;
   snapToGrid: boolean;
+  showGrid: boolean;
 };
 
 class Canvas extends React.Component<CanvasProps> {
@@ -355,7 +356,7 @@ class Canvas extends React.Component<CanvasProps> {
           style={{ fill: 'url(#canvasGradient)' }}
         />
         <g id="Canvas" transform={this.getTransform()}>
-          <Grid show={true}/>
+          <Grid show={this.props.showGrid}/>
           {connections}
           {this.state.connectionInProgress && (
             <ConnectionPreview

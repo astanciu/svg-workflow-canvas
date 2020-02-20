@@ -11,6 +11,7 @@ export const Workflow: FunctionComponent<WorkflowProps> = ({
   workflowChanged = () => {},
   scale = 1,
   snapToGrid = false,
+  showGrid = true,
   render
 }) => {
   const [state, dispatch] = useWorkflow(workflow, { scale, workflowChanged });
@@ -74,7 +75,10 @@ export const Workflow: FunctionComponent<WorkflowProps> = ({
         createConnection={createConnection}
         removeConnection={removeConnection}
         snapToGrid={snapToGrid}
-      />
+        showGrid={showGrid}
+      >
+
+        </Canvas>
     </div>
   );
 };
