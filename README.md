@@ -12,19 +12,6 @@
 yarn add svg-workflow-canvas
 
  ```
-## Run example locally
-
-```bash
-git clone git@github.com:astanciu/svg-workflow-canvas.git
-cd svg-workflow-canvas
-yarn
-yarn start
-
-# in another terminal
-cd example
-yarn
-yarn start
-```
 
 ## Usage
 
