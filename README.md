@@ -2,7 +2,7 @@
 
 > React component to for workflow building using an SVG based canvas
 
-![Alt text](/images/image.png "Optional Title")
+![Alt text](/images/image.png?1 "Optional Title")
 
 [![NPM](https://img.shields.io/npm/v/svg-workflow-canvas.svg)](https://www.npmjs.com/package/svg-workflow-canvas)
 
@@ -10,6 +10,20 @@
 
 ```bash
 yarn add svg-workflow-canvas
+
+ ```
+## Install
+
+```bash
+git clone git@github.com:astanciu/svg-workflow-canvas.git
+cd svg-workflow-canvas
+yarn
+yarn start
+
+# in another terminal
+cd example
+yarn
+yarn start
 ```
 
 ## Usage
