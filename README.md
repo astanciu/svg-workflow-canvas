@@ -12,7 +12,7 @@
 yarn add svg-workflow-canvas
 
  ```
-## Install
+## Run example locally
 
 ```bash
 git clone git@github.com:astanciu/svg-workflow-canvas.git
