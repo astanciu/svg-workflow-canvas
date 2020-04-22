@@ -14,6 +14,7 @@ yarn add svg-workflow-canvas
  ```
 
 ## Usage
+See the example folder for how to use this component. Below is just a very simple example.
 
 ```tsx
 import React from "react";
