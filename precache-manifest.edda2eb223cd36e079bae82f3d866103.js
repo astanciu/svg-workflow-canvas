@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "6035f5f2cf46c35c6a810e338222ed9e",
+    "revision": "e23f8299bb6489fa7abbe5ee132c5402",
     "url": "/svg-workflow-canvas/index.html"
   },
   {
-    "revision": "c1d8c52109b75e822c85",
+    "revision": "bb0ccc32f04560688059",
     "url": "/svg-workflow-canvas/static/css/main.e9008764.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/svg-workflow-canvas/static/js/2.fd2cadb9.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "c1d8c52109b75e822c85",
-    "url": "/svg-workflow-canvas/static/js/main.cfab10f1.chunk.js"
+    "revision": "bb0ccc32f04560688059",
+    "url": "/svg-workflow-canvas/static/js/main.b24b4b65.chunk.js"
   },
   {
     "revision": "62192fbbebefc4339ff9",
