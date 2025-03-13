@@ -1,0 +1,30 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "files": {
+    "ignore": ["dist/*"]
+  },
+  "formatter": {
+    "enabled": true,
+    "lineWidth": 120,
+    "formatWithErrors": true,
+    "indentStyle": "space"
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double"
+    },
+    "jsxRuntime": "reactClassic"
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "a11y": {
+        "useKeyWithClickEvents": "off"
+      }
+    }
+  },
+  "organizeImports": {
+    "enabled": false
+  }
+}

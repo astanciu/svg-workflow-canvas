@@ -4,28 +4,23 @@
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
+  "type": "module",
   "dependencies": {
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-scripts": "^3.3.0",
-    "svg-workflow-canvas": "link:.."
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "svg-workflow-canvas": "link:..",
+    "vite": "^6.2.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@vitejs/plugin-react": "^4.0.3",
+    "sass": "^1.69.5",
+    "typescript": "^5.0.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   }
 }

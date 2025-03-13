@@ -17,9 +17,16 @@
   "license": "MIT",
   "repository": "astanciu/svg-workflow-canvas",
   "homepage": "https://astanciu.github.io/svg-workflow-canvas",
-  "main": "dist/index.js",
-  "module": "dist/index.es.js",
-  "jsnext:main": "dist/index.es.js",
+  "main": "dist/svg-workflow-canvas.umd.js",
+  "module": "dist/svg-workflow-canvas.es.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/svg-workflow-canvas.es.js",
+      "require": "./dist/svg-workflow-canvas.umd.js"
+    },
+    "./styles.css": "./dist/style.css"
+  },
   "engines": {
     "node": ">=8",
     "npm": ">=5"
@@ -27,32 +34,37 @@
   "scripts": {
     "test": "cross-env CI=1 react-scripts-ts test --env=jsdom",
     "test:watch": "react-scripts-ts test --env=jsdom",
-    "build": "rollup -c",
-    "start": "rollup -c -w",
+    "build": "vite build",
+    "build:legacy": "rollup -c",
+    "dev": "cd playground && vite",
+    "start": "yarn dev",
+    "typecheck": "tsc --noEmit",
     "prepare": "yarn run build",
-    "predeploy": "cd example && yarn install && yarn run build",
-    "deploy": "gh-pages -d example/build"
+    "predeploy": "cd playground && yarn install && yarn run build",
+    "deploy": "gh-pages -d playground/dist",
+    "biome": "biome"
   },
   "dependencies": {
-    "lodash": "^4.17.20"
+    "lodash": "^4.17.21"
   },
   "peerDependencies": {
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "@rollup/plugin-node-resolve": "^9.0.0",
-    "@svgr/rollup": "^5.4.0",
+    "@svgr/rollup": "^8.1.0",
     "@types/jest": "^26.0.10",
-    "@types/node": "^14.6.2",
-    "@types/react": "^16.9.49",
-    "@types/react-dom": "^16.9.8",
+    "@types/node": "^22.13.10",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
     "babel-core": "^6.26.3",
     "babel-jest": "^26.3.0",
     "babel-runtime": "^6.26.0",
-    "cross-env": "^7.0.2",
-    "gh-pages": "^3.1.0",
-    "node-sass": "^4.14.1",
+    "cross-env": "^7.0.3",
+    "gh-pages": "^6.3.0",
     "react-scripts-ts": "^3.1.0",
     "rollup": "^2.26.8",
     "rollup-plugin-babel": "^4.4.0",
@@ -62,9 +74,10 @@
     "rollup-plugin-terser": "^7.0.1",
     "rollup-plugin-typescript2": "^0.27.2",
     "rollup-plugin-url": "^3.0.1",
-    "typescript": "^4.0.2"
+    "sass": "^1.85.1",
+    "tsup": "^8.4.0",
+    "vite": "^6.2.2",
+    "vite-plugin-dts": "^4.5.3"
   },
-  "files": [
-    "dist"
-  ]
+  "files": ["dist"]
 }

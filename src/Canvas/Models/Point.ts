@@ -1,8 +1,12 @@
+/**
+ * Point class for representing 2D coordinates
+ * This class is used as both the implementation and the type
+ */
 export class Point {
   public x: number;
   public y: number;
 
-  constructor(x: number = 0, y: number = 0) {
+  constructor(x = 0, y = 0) {
     this.x = x;
     this.y = y;
   }

@@ -1,10 +1,11 @@
-@import '../styles/variables';
+@use "sass:color";
+@use '../styles/variables';
 
-$node-selected-bg: adjust-color($node-bg, $lightness: -10%);  //95999e
-$node-unselected-bg: mix($node-bg, $background, 25%);  //95999e
+$node-selected-bg: color.adjust(variables.$node-bg, $lightness: -10%);  //95999e
+$node-unselected-bg: color.mix(variables.$node-bg, variables.$background, 25%);  //95999e
 
 .normal {
-  fill: $node-bg;
+  fill: variables.$node-bg;
   cursor: pointer;
   stroke: none;
   transition: fill 0.05s linear;
@@ -17,7 +18,7 @@ $node-unselected-bg: mix($node-bg, $background, 25%);  //95999e
 }
 
 .normalIcon {
-  fill: $node-icon;
+  fill: variables.$node-icon;
   stroke: none;
   cursor: pointer;
 }
@@ -66,14 +67,18 @@ $node-unselected-bg: mix($node-bg, $background, 25%);  //95999e
   cursor: none;
 }
 
+.dragging {
+  cursor: grabbing !important;
+}
+
 /* Specials */
 .start {
   composes: normal;
-  fill: $magenta;
+  fill: variables.$magenta;
 }
 .end {
   composes: normal;
-  fill: $green;
+  fill: variables.$green;
 }
 
 .specialIcon {
@@ -83,11 +88,11 @@ $node-unselected-bg: mix($node-bg, $background, 25%);  //95999e
 
 .unselectedStart {
   composes: normal;
-  fill: mix($magenta, $background, 25%);
+  fill: color.mix(variables.$magenta, variables.$background, 25%);
 }
 
 .unselectedEnd {
   composes: normal;
-  fill: mix($green, $background, 25%);
+  fill: color.mix(variables.$green, variables.$background, 25%);
 }
 

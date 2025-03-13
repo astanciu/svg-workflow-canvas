@@ -1,16 +1,16 @@
-import React, { FunctionComponent } from 'react';
-import Icon from '../Icon/Icon';
-import { Node } from '../Models/Node';
-import styles from './Node.module.scss';
-import { InPort, OutPort } from './Ports';
+import React, { type FunctionComponent } from "react";
+import Icon from "../Icon/Icon";
+import type { Node } from "../../types";
+import styles from "./Node.module.scss";
+import { InPort, OutPort } from "./Ports";
 
 export type ShapeProps = {
   node: Node;
   selected: boolean;
   unselected: boolean;
   dragging: boolean;
-  onConnectionDrag: () => void;
-  onConnectionEnd: () => void;
+  onConnectionDrag: (node: Node, e: CustomEvent) => void;
+  onConnectionEnd: (node: Node) => void;
   connectionCandidate: boolean;
 };
 
@@ -21,7 +21,7 @@ export const Shape: FunctionComponent<ShapeProps> = ({
   dragging,
   onConnectionDrag,
   onConnectionEnd,
-  connectionCandidate
+  connectionCandidate,
 }) => {
   let nodeClass = styles.normal;
   let nodeOutline = styles.normalOutline;
@@ -39,17 +39,19 @@ export const Shape: FunctionComponent<ShapeProps> = ({
     nodeIconClass = styles.selectedIcon;
   }
 
+  // Apply grabbing cursor class if node is actively being dragged
   if (dragging) {
-    nodeClass += ' ' + styles.nocursor;
-    nodeIconClass += ' ' + styles.nocursor;
+    nodeClass += ` ${styles.dragging}`;
+    nodeIconClass += ` ${styles.dragging}`;
   }
 
   return (
     <>
       <g
-        id="Hexgons"
-        transform={`translate(-${(node.width * node.scale) /
-          2}, -${(node.height * node.scale) / 2}) scale(${node.scale})`}
+        id="Hexagons"
+        transform={`translate(-${
+          (node.width * node.scale) / 2
+        }, -${(node.height * node.scale) / 2}) scale(${node.scale})`}
       >
         {/* {selected && <polygon
           className={nodeOutline}
@@ -71,11 +73,7 @@ export const Shape: FunctionComponent<ShapeProps> = ({
           onConnectionEnd={onConnectionEnd}
           unselected={unselected}
         />
-        <InPort
-          node={node}
-          highlight={connectionCandidate}
-          unselected={unselected}
-        />
+        <InPort node={node} highlight={connectionCandidate} unselected={unselected} />
       </g>
     </>
   );

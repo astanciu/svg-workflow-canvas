@@ -1,149 +1,194 @@
-import isEqual from 'lodash/isEqual';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Node, Point } from '../Models';
-import EventManager from '../Util/EventManager.js';
-import { NodeTitle } from './NodeTitle';
-import { Shape } from './Shape';
-import { ShapeEnd } from './ShapeEnd';
-import { ShapeStart } from './ShapeStart';
+import isEqual from "lodash/isEqual";
+import React, { useEffect, useRef, useState, useCallback } from "react";
+import { Node, Point } from "../Models";
+import useEventManager from "../Util/useEventManager";
+import { NodeTitle } from "./NodeTitle";
+import { Shape } from "./Shape";
+import { ShapeEnd } from "./ShapeEnd";
+import { ShapeStart } from "./ShapeStart";
 
-type Props = {
+interface NodeProps {
   node: Node;
-  updateNode: any;
+  updateNode: (node: Node) => void;
   selectedNode: Node | null;
   selectNode: (node: Node | null) => void;
-  canvasView: any;
-  onConnectionDrag: any;
-  onConnectionEnd: any;
+  canvasView: {
+    scale: number;
+  };
+  onConnectionDrag: (node: Node, e: CustomEvent) => void;
+  onConnectionEnd: (node: Node) => void;
   snapToGrid: boolean;
   connectionCandidate: boolean;
-};
+}
 
-class NodeComponent extends React.Component<Props> {
-  static displayName = 'Node';
-  static defaultProps = {
-    snapToGrid: true
-  };
-  state = {};
-  private dragging = false;
-  private domNode: Element | Text | null = null;
-  private em!: EventManager;
+const NodeComponent: React.FC<NodeProps> = React.memo(
+  ({
+    node,
+    updateNode,
+    selectedNode,
+    selectNode,
+    canvasView,
+    onConnectionDrag,
+    onConnectionEnd,
+    snapToGrid = true,
+    connectionCandidate,
+  }) => {
+    const [, forceUpdate] = useState<number>(0);
+    const nodeRef = useRef<SVGGElement>(null);
+    const draggingRef = useRef<boolean>(false);
 
-  componentDidMount() {
-    this.domNode = ReactDOM.findDOMNode(this);
+    const eventManager = useEventManager(nodeRef, false);
 
-    this.em = new EventManager(this.domNode as Element);
-    this.em.onTap(this._onTap);
-    this.em.onMove(this._onMove);
+    const snapNodeToGrid = useCallback(() => {
+      if (!snapToGrid) {
+        // If not snapping to grid, still force a re-render to update UI
+        forceUpdate(Math.random());
+        return;
+      }
 
-    this.em.onMoveEnd(this._onMoveEnd);
-    this.snapToGrid();
-  }
+      const updatedNode = new Node(node);
+      const hgrid = 100 * 0.5;
+      const vgrid = 110 * 0.75;
+      const target = {
+        x: Math.round(updatedNode.position.x / hgrid) * hgrid,
+        y: Math.round(updatedNode.position.y / vgrid) * vgrid,
+      };
 
-  componentWillUnmount() {
-    this.em.setdown();
-  }
+      updatedNode.position = new Point(target.x, target.y);
+      updateNode(updatedNode);
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const sameProps = isEqual(nextProps, this.props);
-    const sameState = isEqual(nextState, this.state);
-    const shouldUpdate = !(sameProps && sameState);
+      // // Only update if the position would actually change
+      // if (updatedNode.position.x !== target.x || updatedNode.position.y !== target.y) {
+      //   updatedNode.position = new Point(target.x, target.y);
+      //   updateNode(updatedNode);
+      // } else {
+      //   // Still force a re-render to update UI state (cursor, etc.)
+      //   forceUpdate(Math.random());
+      // }
+    }, [node, snapToGrid, updateNode]);
 
-    return shouldUpdate;
-  }
+    const handleTap = useCallback(
+      (e: Event) => {
+        e.stopPropagation();
+        snapNodeToGrid();
 
-  _onTap = e => {
-    e.stopPropagation();
-    const node = new Node(this.props.node);
-    this.props.selectNode(node);
-  };
-
-  _onMove = e => {
-    e.stopPropagation();
-    this.dragging = true;
-
-    const node = this.props.node.clone();
-    const scaleFactor =
-      (this.props.canvasView && this.props.canvasView.scale) || 1;
-    node.position = new Point(
-      node.position.x + (e.detail.delta.x * 1) / scaleFactor,
-      node.position.y + (e.detail.delta.y * 1) / scaleFactor
+        // Always select the node on tap, the dragging state is reset in handleMoveEnd
+        const clonedNode = new Node(node);
+        selectNode(clonedNode);
+      },
+      [node, selectNode, snapNodeToGrid],
     );
 
-    this.props.updateNode(node);
-  };
+    const handleMove = useCallback(
+      (e: Event) => {
+        e.stopPropagation();
+        draggingRef.current = true;
 
-  _onMoveEnd = () => {
-    this.dragging = false;
-    this.snapToGrid();
-  };
+        const clonedNode = node.clone();
+        const scaleFactor = canvasView?.scale || 1;
+        const customEvent = e as CustomEvent;
 
-  snapToGrid = () => {
-    if (!this.props.snapToGrid) {
-      // hacky, need it because this.dragging and pointer styles
-      this.setState({ forceUpdate: Math.random() });
-      return;
-    }
+        clonedNode.position = new Point(
+          clonedNode.position.x + (customEvent.detail.delta.x * 1) / scaleFactor,
+          clonedNode.position.y + (customEvent.detail.delta.y * 1) / scaleFactor,
+        );
 
-    const node = new Node(this.props.node);
-    const hgrid = 100 * 0.5;
-    const vgrid = 110 * 0.75;
-    const target = {
-      x: Math.round(node.position.x / hgrid) * hgrid,
-      y: Math.round(node.position.y / vgrid) * vgrid
+        updateNode(clonedNode);
+      },
+      [node, canvasView, updateNode],
+    );
+
+    const handleMoveEnd = useCallback(() => {
+      // Reset dragging state
+      draggingRef.current = false;
+      // Apply grid snapping
+      snapNodeToGrid();
+
+      // Use setTimeout to ensure the dragging state is fully reset
+      // This allows the component to receive tap events after dragging
+      setTimeout(() => {
+        forceUpdate(Math.random());
+      }, 0);
+    }, [snapNodeToGrid]);
+
+    useEffect(() => {
+      eventManager.onTap(handleTap);
+      eventManager.onMove(handleMove);
+      eventManager.onMoveEnd(handleMoveEnd);
+
+      // Cleanup function to unregister the events
+      return () => {
+        eventManager.offTap(handleTap);
+        eventManager.offMove(handleMove);
+        eventManager.offMoveEnd(handleMoveEnd);
+      };
+    }, [eventManager, handleTap, handleMove, handleMoveEnd]);
+
+    // Only run snapToGrid on first mount or when relevant props change
+    // biome-ignore lint/correctness/useExhaustiveDependencies:
+    useEffect(() => {
+      if (snapToGrid) {
+        // Check if position is already aligned to grid to avoid loops
+        const hgrid = 100 * 0.5;
+        const vgrid = 110 * 0.75;
+
+        const currentX = node.position.x;
+        const currentY = node.position.y;
+
+        const gridX = Math.round(currentX / hgrid) * hgrid;
+        const gridY = Math.round(currentY / vgrid) * vgrid;
+
+        // Only update if not already aligned to grid
+        if (currentX !== gridX || currentY !== gridY) {
+          const updatedNode = node.clone();
+          updatedNode.position = new Point(gridX, gridY);
+          updateNode(updatedNode);
+        }
+      }
+    }, [node.id]); // Only run on node id change, not on position changes
+
+    const getTransform = () => {
+      return `translate(${node.position.x},${node.position.y})`;
     };
 
-    node.position = new Point(target.x, target.y);
-    this.props.updateNode(node);
-  };
+    const selected = selectedNode ? selectedNode.id === node.id : false;
+    const unselected = selectedNode ? selectedNode.id !== node.id : false;
 
-  getTransform = () => {
-    const loc = {
-      x: this.props.node.position.x,
-      y: this.props.node.position.y
-    };
-    return `translate(${loc.x},${loc.y})`;
-  };
-
-  render() {
-    let selected = false;
-    let unselected = false;
-    if (this.props.selectedNode) {
-      selected = this.props.selectedNode.id === this.props.node.id;
-      unselected = this.props.selectedNode.id !== this.props.node.id;
-    }
-
-    let dragStyle = {
-      cursor: 'inherit'
+    // Set cursor style based on drag state
+    // We use a ref value to determine the current drag state
+    const dragStyle = {
+      cursor: "grab", // Default cursor shows grab (can drag)
     };
 
     let ShapeComponent = Shape;
-    if (this.props.node.id === 'START') {
+    if (node.id === "START") {
       ShapeComponent = ShapeStart;
     }
-    if (this.props.node.id === 'END') {
+    if (node.id === "END") {
       ShapeComponent = ShapeEnd;
     }
 
     return (
-      <g id="Node" transform={this.getTransform()} style={dragStyle}>
+      <g id="Node" transform={getTransform()} style={dragStyle} ref={nodeRef}>
         <ShapeComponent
-          node={this.props.node}
+          node={node}
           selected={selected}
           unselected={unselected}
-          // @ts-ignore
-          dragging={this.dragging}
-          onConnectionDrag={this.props.onConnectionDrag}
-          onConnectionEnd={this.props.onConnectionEnd}
-          connectionCandidate={this.props.connectionCandidate}
+          dragging={draggingRef.current}
+          onConnectionDrag={(node, e) => onConnectionDrag(node, e)}
+          onConnectionEnd={(node) => onConnectionEnd(node)}
+          connectionCandidate={connectionCandidate}
         />
-        {this.props.canvasView.scale > 0.7 && (
-          <NodeTitle node={this.props.node} unselected={unselected} />
-        )}
+        {canvasView.scale > 0.7 && <NodeTitle node={node} unselected={unselected} />}
       </g>
     );
-  }
-}
+  },
+  (prevProps, nextProps) => {
+    // Custom comparison logic
+    return isEqual(prevProps, nextProps);
+  },
+);
+
+NodeComponent.displayName = "NodeComponent";
 
 export default NodeComponent;
