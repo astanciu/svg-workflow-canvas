@@ -1,5 +1,5 @@
-import React, { FunctionComponent } from 'react';
-import styles from './Buttons.module.scss';
+import React, { type FunctionComponent } from "react";
+import styles from "./Buttons.module.scss";
 
 type Props = {};
 

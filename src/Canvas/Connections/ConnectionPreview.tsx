@@ -1,7 +1,7 @@
-import React from 'react';
-import { Node, Point } from '../Models';
-import styles from './Connections.module.scss';
-import { makeSVGPath } from './util';
+import React from "react";
+import type { Node, Point } from "../Models";
+import styles from "./Connections.module.scss";
+import { makeSVGPath } from "./util";
 
 type Props = {
   startNode: Node;

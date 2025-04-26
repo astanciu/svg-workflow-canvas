@@ -1,6 +1,6 @@
-import React, { FunctionComponent } from 'react';
-import { Node } from 'svg-workflow-canvas';
-import styles from './Panel.module.css';
+import React, { type FunctionComponent } from "react";
+import type { Node } from "svg-workflow-canvas";
+import styles from "./Panel.module.css";
 
 type Props = {
   updateNode: (node) => void;
@@ -8,15 +8,11 @@ type Props = {
   selectedNode: Node;
 };
 
-export const Panel: FunctionComponent<Props> = ({
-  updateNode,
-  selectedNode: node,
-  removeNode
-}) => {
+export const Panel: FunctionComponent<Props> = ({ updateNode, selectedNode: node, removeNode }) => {
   if (!node) {
     return null;
   }
-  const setName = e => {
+  const setName = (e) => {
     node.name = e.target.value;
     updateNode(node);
   };

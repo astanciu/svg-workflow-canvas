@@ -1,10 +1,11 @@
+@use "sass:color";
 $background: #e0e0e0;
 $primary-color: #616A74;
 $green: #9fcc00;
 $magenta: #e15aa6;
 
 $node-bg: $primary-color;
-$lines: mix($node-bg, $background, 50%);
+$lines: color.mix($node-bg, $background, 50%);
 
 
 $node-icon: #d1d7e4;

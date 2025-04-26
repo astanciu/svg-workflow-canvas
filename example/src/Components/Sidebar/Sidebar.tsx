@@ -1,12 +1,15 @@
-import React from 'react';
-import { Icon } from 'svg-workflow-canvas';
-import styles from './Sidebar.module.css';
+import { Icon } from "svg-workflow-canvas";
+import styles from "./Sidebar.module.css";
 
-export const Sidebar = ({add, save}) => {
+export const Sidebar = ({ add, save }) => {
   return (
     <div className={styles.sidebar}>
-      <Item icon="plus-circle" onClick={add}>Add</Item>
-      <Item icon="save" onClick={save}>Save</Item>
+      <Item icon="plus-circle" onClick={add}>
+        Add
+      </Item>
+      <Item icon="save" onClick={save}>
+        Save
+      </Item>
     </div>
   );
 };

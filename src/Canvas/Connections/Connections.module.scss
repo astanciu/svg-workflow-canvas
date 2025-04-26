@@ -1,7 +1,8 @@
-@import '../styles/variables';
+@use "sass:color";
+@use '../styles/variables';
 
-$stroke: $lines; //#8a939a;;
-$strokeUnselected: mix($stroke, $background, 25%);
+$stroke: variables.$lines; //#8a939a;;
+$strokeUnselected: color.mix($stroke, variables.$background, 25%);
 
 .previewConnection {
   stroke: #8a939a;

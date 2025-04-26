@@ -1,139 +1,129 @@
-import isEqual from 'lodash/isEqual';
-import { Connection, Node } from '../Canvas/Models';
-import { Point } from '../Canvas/Models/Point';
-import { generateId } from '../Canvas/Util/Utils';
-import { SerializedWorkflow } from '../Workflow/Types';
-import { State } from './Types';
+import isEqual from "lodash/isEqual";
+import { Connection, Node } from "../Canvas/Models";
+import { Point } from "../Canvas/Models/Point";
+import { generateId } from "../Canvas/Util/Utils";
+import type { WorkflowState, SerializedWorkflow, SerializedNode } from "../types/workflow";
 
-export class WorkflowData {
-  static loadState(jsonWorkflow: SerializedWorkflow, options) {
-    const state: State = {
+export const WorkflowData = {
+  loadState(jsonWorkflow: SerializedWorkflow, options: { scale?: number }): WorkflowState {
+    if (!jsonWorkflow) {
+      return {
+        id: generateId(),
+        workflowName: "Workflow",
+        workflowDescription: "Generic workflow",
+        nodes: [],
+        connections: [],
+        selectedNode: null,
+        selectedConnection: null,
+      };
+    }
+
+    const state: WorkflowState = {
       id: jsonWorkflow.id || generateId(),
-      workflowName: jsonWorkflow.name || 'Workflow',
-      workflowDescription: jsonWorkflow.description || 'Generic workflow',
+      workflowName: jsonWorkflow.name || "Workflow",
+      workflowDescription: jsonWorkflow.description || "Generic workflow",
       nodes: [],
       connections: [],
       selectedNode: null,
-      selectedConnection: null
+      selectedConnection: null,
     };
 
-    if (!jsonWorkflow) return state;
-
-    state.nodes = jsonWorkflow.nodes.map(n => {
-      const data = { ...n, scale: 1 };
-      if (options.scale) {
-        data.scale = options.scale;
-      }
-      return new Node(n);
+    state.nodes = jsonWorkflow.nodes.map((n) => {
+      const data = { ...n, scale: options.scale || 1 };
+      return new Node(data);
     });
+
     state.connections = jsonWorkflow.connections
-      .map(c => {
-        const from = state.nodes.find(n => n.id === c.from);
-        if (!from) return null;
-        const to = state.nodes.find(n => n.id === c.to);
-        if (!to) return null;
-        const id = c.id;
-        return new Connection(from, to, id);
+      .map((c) => {
+        const from = state.nodes.find((n) => n.id === c.from);
+        const to = state.nodes.find((n) => n.id === c.to);
+        if (!from || !to) return null;
+        return new Connection(from, to, c.id);
       })
-      .filter(c => c !== null) as Connection[];
+      .filter((c): c is Connection => c !== null);
 
     return state;
-  }
+  },
 
-  static selectNode(state: State, node: Node | null) {
+  selectNode(state: WorkflowState, node: Node | null): WorkflowState {
     return {
       ...state,
-      selectedConnection: node ? { id: -1 } : null,
-      selectedNode: node
+      selectedConnection: "all-disabled",
+      selectedNode: node,
     };
-  }
+  },
 
-  static selectConnection(state, conn: Connection | null) {
+  selectConnection(state: WorkflowState, conn: Connection | null | "all-disabled"): WorkflowState {
     return { ...state, selectedNode: null, selectedConnection: conn };
-  }
+  },
 
-  static updateNode = (state: State, node: Node) => {
+  updateNode(state: WorkflowState, node: Node): WorkflowState {
     let posChanged = false;
     const nodes = state.nodes.map((n: Node) => {
       if (n.id === node.id) {
         posChanged = !isEqual(n.position, node.position);
         return node.clone();
-      } else {
-        return n;
       }
+      return n;
     });
 
-    if (state.selectedNode?.id == node.id) {
-      state.selectedNode = node;
-    }
+    const selectedNode = state.selectedNode?.id === node.id ? node : state.selectedNode;
 
     if (posChanged) {
-      const connections = state.connections.map(conn => {
-        if (conn.from.id === node.id) {
+      const connections = state.connections.map((conn) => {
+        if (conn.from.id === node.id || conn.to.id === node.id) {
           const newConn = conn.clone();
-          newConn.from = node;
-          return newConn;
-        }
-        if (conn.to.id === node.id) {
-          const newConn = conn.clone();
-          newConn.to = node;
+          if (conn.from.id === node.id) newConn.from = node;
+          if (conn.to.id === node.id) newConn.to = node;
           return newConn;
         }
         return conn;
       });
 
-      return { ...state, nodes, connections };
-    } else {
-      return { ...state, nodes };
+      return { ...state, nodes, connections, selectedNode };
     }
-  };
 
-  static removeNode(state: State, node: Node) {
-    const nodes = state.nodes.filter(n => n.id !== node.id);
-    const connections = state.connections.filter(c => {
-      if (c.from.id === node.id) return false;
-      if (c.to.id === node.id) return false;
-      return true;
-    });
+    return { ...state, nodes, selectedNode };
+  },
+
+  removeNode(state: WorkflowState, node: Node): WorkflowState {
+    const nodes = state.nodes.filter((n) => n.id !== node.id);
+    const connections = state.connections.filter((c) => c.from.id !== node.id && c.to.id !== node.id);
     return { ...state, nodes, connections, selectedNode: null };
-  }
+  },
 
-  static removeConnection(state: State, conn: Connection) {
-    const connections = state.connections.filter(c => c.id !== conn.id);
+  removeConnection(state: WorkflowState, conn: Connection): WorkflowState {
+    const connections = state.connections.filter((c) => c.id !== conn.id);
+    console.log("connections", connections);
     return { ...state, connections, selectedConnection: null };
-  }
+  },
 
-  static createConnection(state: State, from: Node, to: Node) {
-    const exists = state.connections.find(
-      c => c.from.id === from.id && c.to.id === to.id
-    );
-    if (exists) return state;
+  createConnection(state: WorkflowState, from: Node, to: Node): WorkflowState {
+    if (state.connections.some((c) => c.from.id === from.id && c.to.id === to.id)) {
+      return state;
+    }
 
     const connections = [...state.connections, new Connection(from, to)];
-
     return { ...state, connections };
-  }
+  },
 
-  static insertNode(
-    state: State,
-    data: { name: string; id: string; icon: string }
-  ) {
+  insertNode(state: WorkflowState, data: SerializedNode): WorkflowState {
     const node = new Node(data);
     node.position = WorkflowData.getNewPosition(state);
 
     const nodes = [...state.nodes, node];
     return { ...state, nodes };
-  }
+  },
 
-  static getNewPosition(state: State): Point {
+  getNewPosition(state: WorkflowState): Point {
     const minDistance = 85;
     let angle = 0;
     let radius = 100;
     let c = 0;
 
     const getNextPoint = () => {
-      let x = Math.cos(angle) * radius;
-      let y = Math.sin(angle) * radius;
+      const x = Math.cos(angle) * radius;
+      const y = Math.sin(angle) * radius;
       angle += (Math.PI * 2) / 12;
       if (angle > Math.PI * 2) {
         angle = 0;
@@ -144,44 +134,34 @@ export class WorkflowData {
 
     let possible = new Point(0, 0);
 
-    let tooClose;
-    do {
-      tooClose = state.nodes.find(
-        node => node.position.distanceTo(possible) <= minDistance
-      );
-
-      if (tooClose) {
-        possible = getNextPoint();
-      }
-
+    while (state.nodes.some((node) => node.position.distanceTo(possible) <= minDistance)) {
+      possible = getNextPoint();
       c++;
-      if (c > 100) return possible;
-    } while (tooClose);
+      if (c > 100) break;
+    }
 
     return possible;
-  }
+  },
 
-  static export(state: State): SerializedWorkflow {
-    const workflow: SerializedWorkflow = {
+  export(state: WorkflowState): SerializedWorkflow {
+    return {
       id: state.id,
       name: state.workflowName,
       description: state.workflowDescription,
-      nodes: state.nodes.map(n => ({
+      nodes: state.nodes.map((n) => ({
         name: n.name,
         id: n.id,
         icon: n.icon,
         position: {
           x: n.position.x,
-          y: n.position.y
-        }
+          y: n.position.y,
+        },
       })),
-      connections: state.connections.map(c => ({
+      connections: state.connections.map((c) => ({
         from: c.from.id,
         to: c.to.id,
-        id: c.id
-      }))
+        id: c.id,
+      })),
     };
-
-    return workflow;
-  }
-}
+  },
+};

@@ -1,3 +1,4 @@
+@use "sass:color";
 $bg: #b3b3b3;
 $bg-off: #a3a3ac;
 $bg-on: #484867;
@@ -29,7 +30,7 @@ $icon-on: #9fcc00;
   cursor: pointer;
 
   &:hover {
-    background-color: darken($bg, $amount: 5%);
+    background-color: color.adjust($bg, $lightness: -5%);
   }
 }
 
@@ -37,14 +38,14 @@ $icon-on: #9fcc00;
   @extend .Button;
   background-color: $bg-off;
   &:hover {
-    background-color: darken($bg-off, $amount: 5%);
+    background-color: color.adjust($bg-off, $lightness: -5%);
   }
 }
 .ToggleButtonOn {
   @extend .ToggleButtonOff;
   background-color: $bg-on;
   &:hover {
-    background-color: darken($bg-on, $amount: 5%);
+    background-color: color.adjust($bg-on, $lightness: -5%);
   }
 }
 .Icon {

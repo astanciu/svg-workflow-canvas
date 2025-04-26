@@ -14,7 +14,7 @@ yarn add svg-workflow-canvas
  ```
 
 ## Usage
-See the example folder for how to use this component. Below is just a very simple example.
+Below is a simple example of how to use this component. You can also check out the playground folder for a more interactive demo.
 
 ```tsx
 import React from "react";
@@ -38,6 +38,21 @@ export default () => {
   );
 };
 
+```
+
+## Development
+
+This project uses Vite for both building the library and for development:
+
+```bash
+# Start the development playground
+yarn dev
+
+# Build the library
+yarn build
+
+# Run type checking
+yarn typecheck
 ```
 
 ## License

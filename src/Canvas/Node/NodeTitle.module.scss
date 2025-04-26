@@ -1,7 +1,8 @@
-@import '../styles/variables';
+@use "sass:color";
+@use '../styles/variables';
 
 $text-color: #464a53;
-$label-color: mix($primary-color, $background, 15%);
+$label-color: color.mix(variables.$primary-color, variables.$background, 15%);
 
 .Title {
   font-family: 'Fira Code', monospace;
@@ -20,7 +21,7 @@ $label-color: mix($primary-color, $background, 15%);
 .UnselectedTitle {
   font-family: 'Fira Code', monospace;
   font-size: 12px;
-  fill: mix($text-color, $label-color, 30%);
+  fill: color.mix($text-color, $label-color, 30%);
   font-weight: normal;
 }
 .Description {
@@ -36,5 +37,5 @@ $label-color: mix($primary-color, $background, 15%);
 }
 
 .unselectedLabel {
-  fill:  change-color($label-color, $alpha: 0);
+  fill:  color.change($label-color, $alpha: 0);
 }

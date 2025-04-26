@@ -1,8 +1,8 @@
-import React, { FunctionComponent } from 'react';
-import Icon from '../Icon/Icon';
-import { Node } from '../Models/Node';
-import styles from './Node.module.scss';
-import { InPort } from './Ports';
+import React, { type FunctionComponent } from "react";
+import Icon from "../Icon/Icon";
+import type { Node } from "../../types";
+import styles from "./Node.module.scss";
+import { InPort } from "./Ports";
 
 export type ShapeProps = {
   node: Node;
@@ -14,19 +14,15 @@ export type ShapeProps = {
   connectionCandidate: boolean;
 };
 
-export const ShapeEnd: FunctionComponent<ShapeProps> = ({
-  node,
-  unselected,
-  connectionCandidate
-}) => {
+export const ShapeEnd: FunctionComponent<ShapeProps> = ({ node, unselected, connectionCandidate }) => {
   const className = unselected ? styles.unselectedEnd : styles.end;
   return (
     <>
       <g
-        id="Hexgons"
-        transform={`translate(-${(node.width * node.scale * 0.8) /
-          2}, -${(node.height * node.scale * 0.8) / 2}) scale(${node.scale *
-          0.8})`}
+        id="Hexagons"
+        transform={`translate(-${
+          (node.width * node.scale * 0.8) / 2
+        }, -${(node.height * node.scale * 0.8) / 2}) scale(${node.scale * 0.8})`}
       >
         <polygon
           className={className}
@@ -34,18 +30,10 @@ export const ShapeEnd: FunctionComponent<ShapeProps> = ({
         />
       </g>
 
-      <Icon
-        icon={node.icon}
-        className={styles.specialIcon}
-        size={28 * node.scale * 0.9}
-      />
+      <Icon icon={node.icon} className={styles.specialIcon} size={28 * node.scale * 0.9} />
 
       <g id="Ports" transform={`translate(${0},${0})`}>
-        <InPort
-          node={node}
-          highlight={connectionCandidate}
-          unselected={unselected}
-        />
+        <InPort node={node} highlight={connectionCandidate} unselected={unselected} />
       </g>
     </>
   );
