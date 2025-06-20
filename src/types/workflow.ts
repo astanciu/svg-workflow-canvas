@@ -65,8 +65,17 @@ export interface NodeInput {
  * Node data structure
  */
 export interface NodeData {
-  formDef: NodeInput[];
   formData?: Record<string, any>;
+}
+
+/**
+ * Node template structure for library
+ */
+export interface NodeTemplate extends Omit<SerializedNode, 'data'> {
+  data?: {
+    formDef: NodeInput[];
+    formData?: Record<string, any>;
+  };
 }
 
 /**

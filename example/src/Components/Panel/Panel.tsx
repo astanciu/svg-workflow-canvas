@@ -1,6 +1,7 @@
 import React, { type FunctionComponent } from "react";
 import { Node } from "svg-workflow-canvas";
 import styles from "./Panel.module.css";
+import { getFormDefFromLibrary } from "../NodeLibrary/nodeTemplates";
 
 type Props = {
   updateNode: (node) => void;
@@ -23,14 +24,12 @@ export const Panel: FunctionComponent<Props> = ({
     if (property === "name") {
       updatedNode.name = value;
     } else {
-      // Handle data properties
-      if (!updatedNode.data) {
-        updatedNode.data = { formDef: [], formData: {} };
+      if (updatedNode.data) {
+        updatedNode.data.formData = {
+          ...updatedNode.data.formData,
+          [property]: value,
+        };
       }
-      updatedNode.data.formData = {
-        ...updatedNode.data.formData,
-        [property]: value,
-      };
     }
 
     updateNode(updatedNode);
@@ -38,7 +37,7 @@ export const Panel: FunctionComponent<Props> = ({
 
   const renderInput = (input) => {
     const value = node.data?.formData?.[input.name] || "";
-    
+
     switch (input.control) {
       case "textarea":
         return (
@@ -49,7 +48,7 @@ export const Panel: FunctionComponent<Props> = ({
             onChange={(e) => updateNodeProperty(input.name, e.target.value)}
           />
         );
-      
+
       case "select":
         return (
           <select
@@ -59,11 +58,13 @@ export const Panel: FunctionComponent<Props> = ({
           >
             <option value="">Select an option</option>
             {input.options?.map((option) => (
-              <option key={option} value={option}>{option}</option>
+              <option key={option} value={option}>
+                {option}
+              </option>
             ))}
           </select>
         );
-      
+
       case "checkbox":
         return (
           <input
@@ -73,7 +74,7 @@ export const Panel: FunctionComponent<Props> = ({
             onChange={(e) => updateNodeProperty(input.name, e.target.checked)}
           />
         );
-      
+
       case "number":
         return (
           <input
@@ -81,10 +82,12 @@ export const Panel: FunctionComponent<Props> = ({
             id={input.name}
             value={value}
             placeholder={input.placeholder}
-            onChange={(e) => updateNodeProperty(input.name, parseFloat(e.target.value) || 0)}
+            onChange={(e) =>
+              updateNodeProperty(input.name, parseFloat(e.target.value) || 0)
+            }
           />
         );
-      
+
       default: // "input"
         return (
           <input
@@ -109,7 +112,7 @@ export const Panel: FunctionComponent<Props> = ({
             value={node.name}
           />
         </div>
-        {node.data?.formDef?.map((input) => (
+        {getFormDefFromLibrary((node as any).id).map((input) => (
           <div key={input.name} className={styles.inputGroup}>
             <label htmlFor={input.name}>{input.label}</label>
             {renderInput(input)}
@@ -122,3 +125,4 @@ export const Panel: FunctionComponent<Props> = ({
     </div>
   );
 };
+

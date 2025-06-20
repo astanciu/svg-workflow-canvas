@@ -36,7 +36,6 @@ export class Node {
     }
     if (node.data) {
       this.data = {
-        ...node.data,
         formData: node.data.formData || {}
       };
     }

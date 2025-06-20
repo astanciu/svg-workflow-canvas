@@ -1,6 +1,6 @@
-import type { SerializedNode } from "../../../../src/types/workflow";
+import type { NodeTemplate } from "../../../../src/types/workflow";
 
-export const nodeTemplates: SerializedNode[] = [
+export const nodeTemplates: NodeTemplate[] = [
     {
         name: "Get first",
         id: "first",
@@ -41,16 +41,12 @@ export const nodeTemplates: SerializedNode[] = [
               control: "textarea",
               placeholder: "Enter text message"
             }
-          ],
-          formData: {
-            phone: "",
-            message: ""
-          }
+          ]
         }
     }
 ]
 
-// formDef saved in the library
-// Get formDef from library not the node
-// rename App to WorkflowEditor - 2 props workflow and library
-// make API call - React Query
+export const getFormDefFromLibrary = (nodeId: string) => {
+  const template = nodeTemplates.find(template => template.id === nodeId);
+  return template?.data?.formDef || [];
+};

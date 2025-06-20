@@ -30,8 +30,8 @@ const WorkflowEditor = (work) => {
     addNodeWorkflowFn(uniqueNodeInstance);
   };
 
-  const saveWorkflow = (fn) => () => {
-    const workflow = fn();
+  const saveWorkflow = (save) => () => {
+    const workflow = save();
     console.log("Store this in DB: ", workflow);
     alert("In this demo, data was dumped to console");
   };

@@ -2,10 +2,17 @@ import isEqual from "lodash/isEqual";
 import { Connection, Node } from "../Canvas/Models";
 import { Point } from "../Canvas/Models/Point";
 import { generateId } from "../Canvas/Util/Utils";
-import type { WorkflowState, SerializedWorkflow, SerializedNode } from "../types/workflow";
+import type {
+  WorkflowState,
+  SerializedWorkflow,
+  SerializedNode,
+} from "../types/workflow";
 
 export const WorkflowData = {
-  loadState(jsonWorkflow: SerializedWorkflow, options: { scale?: number }): WorkflowState {
+  loadState(
+    jsonWorkflow: SerializedWorkflow,
+    options: { scale?: number }
+  ): WorkflowState {
     if (!jsonWorkflow) {
       return {
         id: generateId(),
@@ -53,7 +60,10 @@ export const WorkflowData = {
     };
   },
 
-  selectConnection(state: WorkflowState, conn: Connection | null | "all-disabled"): WorkflowState {
+  selectConnection(
+    state: WorkflowState,
+    conn: Connection | null | "all-disabled"
+  ): WorkflowState {
     return { ...state, selectedNode: null, selectedConnection: conn };
   },
 
@@ -67,11 +77,17 @@ export const WorkflowData = {
       return n;
     });
 
-    const selectedNode = state.selectedNode?.instanceId === node.instanceId ? node : state.selectedNode;
+    const selectedNode =
+      state.selectedNode?.instanceId === node.instanceId
+        ? node
+        : state.selectedNode;
 
     if (posChanged) {
       const connections = state.connections.map((conn) => {
-        if (conn.from.instanceId === node.instanceId || conn.to.instanceId === node.instanceId) {
+        if (
+          conn.from.instanceId === node.instanceId ||
+          conn.to.instanceId === node.instanceId
+        ) {
           const newConn = conn.clone();
           if (conn.from.instanceId === node.instanceId) newConn.from = node;
           if (conn.to.instanceId === node.instanceId) newConn.to = node;
@@ -88,7 +104,11 @@ export const WorkflowData = {
 
   removeNode(state: WorkflowState, node: Node): WorkflowState {
     const nodes = state.nodes.filter((n) => n.instanceId !== node.instanceId);
-    const connections = state.connections.filter((c) => c.from.instanceId !== node.instanceId && c.to.instanceId !== node.instanceId);
+    const connections = state.connections.filter(
+      (c) =>
+        c.from.instanceId !== node.instanceId &&
+        c.to.instanceId !== node.instanceId
+    );
     return { ...state, nodes, connections, selectedNode: null };
   },
 
@@ -99,7 +119,13 @@ export const WorkflowData = {
   },
 
   createConnection(state: WorkflowState, from: Node, to: Node): WorkflowState {
-    if (state.connections.some((c) => c.from.instanceId === from.instanceId && c.to.instanceId === to.instanceId)) {
+    if (
+      state.connections.some(
+        (c) =>
+          c.from.instanceId === from.instanceId &&
+          c.to.instanceId === to.instanceId
+      )
+    ) {
       return state;
     }
 
@@ -134,7 +160,11 @@ export const WorkflowData = {
 
     let possible = new Point(0, 0);
 
-    while (state.nodes.some((node) => node.position.distanceTo(possible) <= minDistance)) {
+    while (
+      state.nodes.some(
+        (node) => node.position.distanceTo(possible) <= minDistance
+      )
+    ) {
       possible = getNextPoint();
       c++;
       if (c > 100) break;
@@ -157,7 +187,7 @@ export const WorkflowData = {
           x: n.position.x,
           y: n.position.y,
         },
-        data: n.data,
+        ...(n.data ? { data: { formData: n.data.formData } } : {}),
       })),
       connections: state.connections.map((c) => ({
         from: c.from.instanceId,
