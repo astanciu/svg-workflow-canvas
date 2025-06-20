@@ -9,4 +9,41 @@
   background-color: #fdfeff;
   overflow: hidden;
   border-left: 1px solid #bbc5ca;
+  max-width: 100%;
+}
+
+.inputGroup input,
+.inputGroup textarea,
+.inputGroup select {
+  width: 90%;
+  padding: 5px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.inputGroup textarea {
+  margin: 10px;
+  min-height: 80px;
+  resize: vertical;
+  line-height: 1.4;
+  width: 90%;
+  box-sizing: border-box;
+}
+
+.inputGroup input:focus,
+.inputGroup textarea:focus,
+.inputGroup select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Hide number input spinners in Chrome, Safari, Edge, Opera */
+.inputGroup input[type="number"]::-webkit-outer-spin-button,
+.inputGroup input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

@@ -42,8 +42,31 @@ export interface SerializedNode {
   name: string;
   id: string;
   icon: string;
+  instanceId?: string;
   position?: SerializedPoint;
   scale?: number;
+  data?: NodeData;
+}
+
+export type InputControl = "input" | "textarea" | "select" | "checkbox" | "number";
+
+export interface NodeInput {
+  name: string;
+  type: "string" | "number" | "boolean" | "select";
+  label: string;
+  control: InputControl;
+  required?: boolean;
+  defaultValue?: any;
+  options?: string[]; // For select controls
+  placeholder?: string;
+}
+
+/**
+ * Node data structure
+ */
+export interface NodeData {
+  formDef: NodeInput[];
+  formData?: Record<string, any>;
 }
 
 /**

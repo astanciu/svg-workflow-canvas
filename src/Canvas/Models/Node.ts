@@ -1,6 +1,6 @@
-import type { SerializedNode } from "../../types/workflow";
+import type { SerializedNode, NodeData } from "../../types/workflow";
 import { IconLibrary } from "../Assets/icon-library";
-import { generateId } from "../Util/Utils";
+// import { generateId } from "../Util/Utils";
 import { Point } from "./Point";
 
 /**
@@ -9,7 +9,8 @@ import { Point } from "./Point";
  */
 export class Node {
   public name = "Node";
-  public id: string = generateId();
+  public id: string;
+  public instanceId: string;
   public icon: string;
   public position: Point = new Point();
   public selected = false;
@@ -19,14 +20,25 @@ export class Node {
   public inPortOffset: Point;
   public width = 80;
   public height = 79;
+  public data?: NodeData;
 
   constructor(node: SerializedNode) {
     Object.assign(this, node);
     this.position = new Point(node.position?.x || 0, node.position?.y || 0);
     this.outPortOffset = new Point(45 * this.scale, 0);
     this.inPortOffset = new Point(-45 * this.scale, 0);
+
+    if (!this.instanceId) {
+      this.instanceId = this.id;
+    }
     if (!this.icon) {
       this.icon = this.getRandomIcon();
+    }
+    if (node.data) {
+      this.data = {
+        ...node.data,
+        formData: node.data.formData || {}
+      };
     }
   }
 

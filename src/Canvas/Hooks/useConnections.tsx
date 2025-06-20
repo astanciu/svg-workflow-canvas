@@ -55,8 +55,8 @@ const useConnections = ({ view, nodes, createConnection }: UseConnectionsProps) 
   const setClosestNodeToMouse = useCallback(
     (mouse: Point, sourceNode: Node): void => {
       const closest = getClosestInPortNode(mouse);
-      // Don't allow connecting to self (same node)
-      if (closest && closest.id === sourceNode.id) {
+      // Don't allow connecting to self (same node instance)
+      if (closest && closest.instanceId === sourceNode.instanceId) {
         setClosestNode(undefined);
       } else {
         setClosestNode(closest);
@@ -88,7 +88,7 @@ const useConnections = ({ view, nodes, createConnection }: UseConnectionsProps) 
     (node: Node) => {
       // Only create connection if we have a valid target node
       // and it's not the same as the source node (prevent self-connections)
-      if (closestNode && node.id !== closestNode.id) {
+      if (closestNode && node.instanceId !== closestNode.instanceId) {
         createConnection(node, closestNode);
       }
 
@@ -104,7 +104,7 @@ const useConnections = ({ view, nodes, createConnection }: UseConnectionsProps) 
       // A node is a connection candidate if it's the closest node
       // AND not the source node of the connection (prevent self-connections)
       return Boolean(
-        closestNode && closestNode.id === nodeId && connectionInProgress && connectionInProgress.from.id !== nodeId,
+        closestNode && closestNode.instanceId === nodeId && connectionInProgress && connectionInProgress.from.instanceId !== nodeId,
       );
     },
     [closestNode, connectionInProgress],

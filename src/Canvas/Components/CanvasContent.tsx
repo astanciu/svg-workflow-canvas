@@ -36,13 +36,13 @@ const CanvasContent: React.FC<CanvasContentProps> = ({ transform }) => {
   const nodeComponents = useMemo(() => {
     return nodes.map((node) => (
       <NodeComponent
-        key={node.id}
+        key={node.instanceId}
         node={node}
         updateNode={updateNode}
         canvasView={view}
         onConnectionDrag={handleConnectionDrag}
         onConnectionEnd={handleConnectionEnd}
-        connectionCandidate={isConnectionCandidate(node.id)}
+        connectionCandidate={isConnectionCandidate(node.instanceId)}
         selectNode={selectNode}
         selectedNode={selectedNode}
         snapToGrid={snapToGrid}

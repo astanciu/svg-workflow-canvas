@@ -9,7 +9,7 @@ type State = WorkflowState;
 type WorkflowAction =
   | { type: "selectNode"; node: Node | null }
   | { type: "updateNode"; node: Node }
-  | { type: "insertNode"; node: { name: string; id: string; icon: string } }
+  | { type: "insertNode"; node: { name: string; id: string; instanceId: string; icon: string } }
   | { type: "removeNode"; node: Node }
   | { type: "selectConnection"; connection: Connection | null | "all-disabled" }
   | { type: "createConnection"; from: Node; to: Node }

@@ -145,14 +145,14 @@ const NodeComponent: React.FC<NodeProps> = React.memo(
           updateNode(updatedNode);
         }
       }
-    }, [node.id]); // Only run on node id change, not on position changes
+    }, [node.instanceId]); // Only run on node instanceId change, not on position changes
 
     const getTransform = () => {
       return `translate(${node.position.x},${node.position.y})`;
     };
 
-    const selected = selectedNode ? selectedNode.id === node.id : false;
-    const unselected = selectedNode ? selectedNode.id !== node.id : false;
+    const selected = selectedNode ? selectedNode.instanceId === node.instanceId : false;
+    const unselected = selectedNode ? selectedNode.instanceId !== node.instanceId : false;
 
     // Set cursor style based on drag state
     // We use a ref value to determine the current drag state

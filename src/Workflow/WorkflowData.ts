@@ -35,8 +35,8 @@ export const WorkflowData = {
 
     state.connections = jsonWorkflow.connections
       .map((c) => {
-        const from = state.nodes.find((n) => n.id === c.from);
-        const to = state.nodes.find((n) => n.id === c.to);
+        const from = state.nodes.find((n) => n.instanceId === c.from);
+        const to = state.nodes.find((n) => n.instanceId === c.to);
         if (!from || !to) return null;
         return new Connection(from, to, c.id);
       })
@@ -60,21 +60,21 @@ export const WorkflowData = {
   updateNode(state: WorkflowState, node: Node): WorkflowState {
     let posChanged = false;
     const nodes = state.nodes.map((n: Node) => {
-      if (n.id === node.id) {
+      if (n.instanceId === node.instanceId) {
         posChanged = !isEqual(n.position, node.position);
         return node.clone();
       }
       return n;
     });
 
-    const selectedNode = state.selectedNode?.id === node.id ? node : state.selectedNode;
+    const selectedNode = state.selectedNode?.instanceId === node.instanceId ? node : state.selectedNode;
 
     if (posChanged) {
       const connections = state.connections.map((conn) => {
-        if (conn.from.id === node.id || conn.to.id === node.id) {
+        if (conn.from.instanceId === node.instanceId || conn.to.instanceId === node.instanceId) {
           const newConn = conn.clone();
-          if (conn.from.id === node.id) newConn.from = node;
-          if (conn.to.id === node.id) newConn.to = node;
+          if (conn.from.instanceId === node.instanceId) newConn.from = node;
+          if (conn.to.instanceId === node.instanceId) newConn.to = node;
           return newConn;
         }
         return conn;
@@ -87,8 +87,8 @@ export const WorkflowData = {
   },
 
   removeNode(state: WorkflowState, node: Node): WorkflowState {
-    const nodes = state.nodes.filter((n) => n.id !== node.id);
-    const connections = state.connections.filter((c) => c.from.id !== node.id && c.to.id !== node.id);
+    const nodes = state.nodes.filter((n) => n.instanceId !== node.instanceId);
+    const connections = state.connections.filter((c) => c.from.instanceId !== node.instanceId && c.to.instanceId !== node.instanceId);
     return { ...state, nodes, connections, selectedNode: null };
   },
 
@@ -99,7 +99,7 @@ export const WorkflowData = {
   },
 
   createConnection(state: WorkflowState, from: Node, to: Node): WorkflowState {
-    if (state.connections.some((c) => c.from.id === from.id && c.to.id === to.id)) {
+    if (state.connections.some((c) => c.from.instanceId === from.instanceId && c.to.instanceId === to.instanceId)) {
       return state;
     }
 
@@ -152,14 +152,16 @@ export const WorkflowData = {
         name: n.name,
         id: n.id,
         icon: n.icon,
+        instanceId: n.instanceId,
         position: {
           x: n.position.x,
           y: n.position.y,
         },
+        data: n.data,
       })),
       connections: state.connections.map((c) => ({
-        from: c.from.id,
-        to: c.to.id,
+        from: c.from.instanceId,
+        to: c.to.instanceId,
         id: c.id,
       })),
     };

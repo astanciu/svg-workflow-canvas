@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useEffect } from "react";
 import Canvas from "../Canvas/Canvas";
-import type { SerializedWorkflow, WorkflowProps } from "../types/workflow";
+import type { SerializedNode, SerializedWorkflow, WorkflowProps } from "../types/workflow";
 import { useWorkflow } from "./useWorkflow";
 import styles from "./Workflow.module.scss";
 import { WorkflowData } from "./WorkflowData";
@@ -11,7 +11,22 @@ const emptyWorkflow: SerializedWorkflow = {
   id: "new-workflow",
   name: "New Workflow",
   description: "New Workflow",
-  nodes: [],
+  nodes: [
+    {
+      name: "Start",
+      id: "START",
+      instanceId: "START",
+      icon: "sign-in-alt",
+      position: { x: -400, y: 0 },
+    },
+    {
+      name: "End",
+      id: "END",
+      instanceId: "END",
+      icon: "sign-out-alt",
+      position: { x: 350, y: 0 },
+    },
+  ],
   connections: [],
 };
 
@@ -34,22 +49,40 @@ export const Workflow = ({
   // forces all similar components to re-render, when just one
   // item (node, connection) is actually changed. Alternative
   // would be to pass dispatch as a prop.
-  const selectNode = useCallback((node) => dispatch({ type: "selectNode", node }), [dispatch]);
-  const updateNode = useCallback((node) => dispatch({ type: "updateNode", node }), [dispatch]);
-  const removeNode = useCallback((node) => dispatch({ type: "removeNode", node }), [dispatch]);
-  const removeConnection = useCallback((connection) => dispatch({ type: "removeConnection", connection }), [dispatch]);
+  const selectNode = useCallback(
+    (node) => dispatch({ type: "selectNode", node }),
+    [dispatch]
+  );
+  const updateNode = useCallback(
+    (node) => dispatch({ type: "updateNode", node }),
+    [dispatch]
+  );
+  const removeNode = useCallback(
+    (node) => dispatch({ type: "removeNode", node }),
+    [dispatch]
+  );
+  const removeConnection = useCallback(
+    (connection) => dispatch({ type: "removeConnection", connection }),
+    [dispatch]
+  );
   const createConnection = useCallback(
     (from, to) => {
       // console.log("callback createConnection", from, to);
       dispatch({ type: "createConnection", from, to });
     },
-    [dispatch],
+    [dispatch]
   );
-  const selectConnection = useCallback((conn) => dispatch({ type: "selectConnection", connection: conn }), [dispatch]);
-  const insertNode = useCallback((node) => dispatch({ type: "insertNode", node }), [dispatch]);
+  const selectConnection = useCallback(
+    (conn) => dispatch({ type: "selectConnection", connection: conn }),
+    [dispatch]
+  );
+  const insertNode = useCallback(
+    (node) => dispatch({ type: "insertNode", node }),
+    [dispatch]
+  );
 
   const addNode = (node) => {
-    insertNode(node.name);
+    insertNode(node);
   };
   const saveWorkflow = () => {
     return WorkflowData.export(state);
@@ -57,7 +90,13 @@ export const Workflow = ({
 
   return (
     <div id="workflow-container" className={styles.CanvasContainer}>
-      {render?.(addNode, saveWorkflow, updateNode, removeNode, state.selectedNode)}
+      {render?.(
+        addNode,
+        saveWorkflow,
+        updateNode,
+        removeNode,
+        state.selectedNode
+      )}
       <Canvas
         nodes={state.nodes}
         updateNode={updateNode}

@@ -27,9 +27,9 @@ export const NodeTitle = ({ node, unselected }) => {
   const y = 58 * node.scale;
   const fontSize = 12 * node.scale;
 
-  if (["START", "END"].includes(node.id)) {
-    node.name = node.id.toLowerCase();
-  }
+  // if (["START", "END"].includes(node.id)) {
+  //   node.name = node.id.toLowerCase();
+  // }
 
   const labelHeight = 18;
   const labelWidth = node.name.length * 7 + 30;
