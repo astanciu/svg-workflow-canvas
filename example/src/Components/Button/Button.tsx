@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon } from "svg-workflow-canvas";
+import Icon from "../../../../src/Canvas/Icon/Icon";
 import styles from "./Buttons.module.scss";
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
 
 export const Button = React.memo(({ icon, tooltip, onClick }: Props) => {
   return (
-    <div className={styles.Button} onClick={onClick}>
+    <div className={styles.Button} onClick={onClick} title={tooltip}>
       <Icon icon={icon} size={20} className={styles.Icon} />
     </div>
   );

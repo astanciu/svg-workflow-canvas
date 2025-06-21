@@ -7,31 +7,31 @@ import { WorkflowData } from "./WorkflowData";
 
 export const WorkflowContext = createContext(null);
 
-const emptyWorkflow: SerializedWorkflow = {
-  id: "new-workflow",
-  name: "New Workflow",
-  description: "New Workflow",
-  nodes: [
-    {
-      name: "Start",
-      id: "START",
-      instanceId: "START",
-      icon: "sign-in-alt",
-      position: { x: -400, y: 0 },
-    },
-    {
-      name: "End",
-      id: "END",
-      instanceId: "END",
-      icon: "sign-out-alt",
-      position: { x: 350, y: 0 },
-    },
-  ],
-  connections: [],
-};
+// const emptyWorkflow: SerializedWorkflow = {
+//   id: "new-workflow",
+//   name: "New Workflow",
+//   description: "New Workflow",
+//   nodes: [
+//     {
+//       name: "Start",
+//       id: "START",
+//       instanceId: "START",
+//       icon: "sign-in-alt",
+//       position: { x: -400, y: 0 },
+//     },
+//     {
+//       name: "End",
+//       id: "END",
+//       instanceId: "END",
+//       icon: "sign-out-alt",
+//       position: { x: 350, y: 0 },
+//     },
+//   ],
+//   connections: [],
+// };
 
 export const Workflow = ({
-  workflow = emptyWorkflow,
+  workflow,
   workflowChanged = () => {},
   scale = 1,
   snapToGrid = false,

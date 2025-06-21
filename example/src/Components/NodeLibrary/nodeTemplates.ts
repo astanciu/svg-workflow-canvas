@@ -45,8 +45,3 @@ export const nodeTemplates: NodeTemplate[] = [
         }
     }
 ]
-
-export const getFormDefFromLibrary = (nodeId: string) => {
-  const template = nodeTemplates.find(template => template.id === nodeId);
-  return template?.data?.formDef || [];
-};

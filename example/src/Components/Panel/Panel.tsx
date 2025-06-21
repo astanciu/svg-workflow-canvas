@@ -1,18 +1,20 @@
 import React, { type FunctionComponent } from "react";
 import { Node } from "svg-workflow-canvas";
 import styles from "./Panel.module.css";
-import { getFormDefFromLibrary } from "../NodeLibrary/nodeTemplates";
+import type { NodeTemplate } from "../../../../src/types/workflow";
 
 type Props = {
   updateNode: (node) => void;
   removeNode: (node) => void;
   selectedNode: Node;
+  library: NodeTemplate[];
 };
 
 export const Panel: FunctionComponent<Props> = ({
   updateNode,
   selectedNode: node,
   removeNode,
+  library,
 }) => {
   if (!node || node.name === "Start" || node.name === "End") {
     return null;
@@ -112,7 +114,10 @@ export const Panel: FunctionComponent<Props> = ({
             value={node.name}
           />
         </div>
-        {getFormDefFromLibrary((node as any).id).map((input) => (
+        {(
+          library.find((template) => template.id === (node as any).id)?.data
+            ?.formDef || []
+        ).map((input) => (
           <div key={input.name} className={styles.inputGroup}>
             <label htmlFor={input.name}>{input.label}</label>
             {renderInput(input)}
@@ -125,4 +130,3 @@ export const Panel: FunctionComponent<Props> = ({
     </div>
   );
 };
-

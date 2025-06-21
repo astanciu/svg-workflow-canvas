@@ -5,9 +5,8 @@ import { ButtonToggle } from "./Components/Button/ButtonToggle";
 import { ButtonGroup } from "./Components/Button/ButtonGroup";
 import { Panel } from "./Components/Panel/Panel";
 import { useLocalStorage } from "./Components/useLocalStorage";
-import { NodeLibrary } from "./Components/NodeLibrary/NodeLibrary";
 
-const WorkflowEditor = (work) => {
+const WorkflowEditor = ({library, NodeLibrary, workflow}) => {
   const [showGrid, setShowGrid] = useLocalStorage("settings.showGrid", true);
   const [showNodeLibrary, setShowNodeLibrary] = useState(false);
   const [nodeCounters, setNodeCounters] = useState({});
@@ -47,7 +46,7 @@ const WorkflowEditor = (work) => {
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
       <Workflow
-      //workflow={w1} keep the default workflow here!
+        workflow={workflow}
         scale={1}
         snapToGrid
         showGrid={showGrid}
@@ -58,22 +57,22 @@ const WorkflowEditor = (work) => {
               updateNode={updateNode}
               removeNode={removeNode}
               selectedNode={selectedNode}
-              //libraryNode={library[selectedNode.id]}
+              library={library}
             />
             <ButtonGroup>
               <Button
                 icon="plus-circle"
-                tooltip="This is the cog"
+                tooltip="Add node"
                 onClick={toggleNodeLibrary}
               />
               <Button
                 icon="save"
-                tooltip="This is the cog"
+                tooltip="Save workflow"
                 onClick={saveWorkflow(save)}
               />
               <ButtonToggle
                 icon="th"
-                tooltip="This is the cog"
+                tooltip="Toggle grid"
                 enabled={showGrid}
                 onClick={toggleGrid}
               />
@@ -82,6 +81,7 @@ const WorkflowEditor = (work) => {
               <NodeLibrary
                 onNodeSelect={addNode(add)}
                 onClose={toggleNodeLibrary}
+                library={library}
               />
             )}
           </>
