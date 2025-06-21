@@ -1,0 +1,114 @@
+{
+  "id": "new-workflow",
+  "name": "New Workflow",
+  "description": "New Workflow",
+  "nodes": [
+    {
+      "name": "Start",
+      "id": "START",
+      "icon": "sign-in-alt",
+      "instanceId": "START",
+      "position": {
+        "x": -400,
+        "y": 0
+      }
+    },
+    {
+      "name": "End",
+      "id": "END",
+      "icon": "sign-out-alt",
+      "instanceId": "END",
+      "position": {
+        "x": 350,
+        "y": 0
+      }
+    },
+    {
+      "name": "Get first",
+      "id": "first",
+      "icon": "user-circle",
+      "instanceId": "first-1",
+      "position": {
+        "x": -100,
+        "y": 82.5
+      }
+    },
+    {
+      "name": "Get first",
+      "id": "first",
+      "icon": "user-circle",
+      "instanceId": "first-2",
+      "position": {
+        "x": -250,
+        "y": 0
+      }
+    },
+    {
+      "name": "Get last",
+      "id": "last",
+      "icon": "user",
+      "instanceId": "last-1",
+      "position": {
+        "x": 50,
+        "y": 82.5
+      }
+    },
+    {
+      "name": "Get last",
+      "id": "last",
+      "icon": "user",
+      "instanceId": "last-2",
+      "position": {
+        "x": -100,
+        "y": -82.5
+      }
+    },
+    {
+      "name": "Greet",
+      "id": "greet",
+      "icon": "smile",
+      "instanceId": "greet-2",
+      "position": {
+        "x": 200,
+        "y": 0
+      }
+    }
+  ],
+  "connections": [
+    {
+      "from": "START",
+      "to": "first-2",
+      "id": "2ao5t66"
+    },
+    {
+      "from": "first-2",
+      "to": "last-2",
+      "id": "ith3za4"
+    },
+    {
+      "from": "first-2",
+      "to": "first-1",
+      "id": "280eoes"
+    },
+    {
+      "from": "first-1",
+      "to": "last-1",
+      "id": "l905n8s"
+    },
+    {
+      "from": "last-1",
+      "to": "greet-2",
+      "id": "lat89oz"
+    },
+    {
+      "from": "greet-2",
+      "to": "END",
+      "id": "qhq68g5"
+    },
+    {
+      "from": "last-2",
+      "to": "greet-2",
+      "id": "52g3ke4"
+    }
+  ]
+}
