@@ -2,6 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import "./index.css";
-import WorkflowEditor from "./WorkflowEditor";
+import App from "./App";
 
-ReactDOM.render(<WorkflowEditor />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById("root"));
