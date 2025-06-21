@@ -1,0 +1,13 @@
+{
+  "name": "workflow-engine",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/run.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.3",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  }
+}
