@@ -1,16 +1,43 @@
 import React, { useState } from "react";
-import Workflow from "svg-workflow-canvas";
+import { useMutation } from "@tanstack/react-query";
+import Workflow from "../../../src/index";
 import { Button } from "./Components/Button/Button";
 import { ButtonToggle } from "./Components/Button/ButtonToggle";
 import { ButtonGroup } from "./Components/Button/ButtonGroup";
 import { Panel } from "./Components/Panel/Panel";
 import { useLocalStorage } from "./Components/useLocalStorage";
-import { NodeLibrary } from "./Components/NodeLibrary/NodeLibrary";
 
-const WorkflowEditor = (work) => {
+const WorkflowEditor = ({library, NodeLibrary, workflow}) => {
   const [showGrid, setShowGrid] = useLocalStorage("settings.showGrid", true);
   const [showNodeLibrary, setShowNodeLibrary] = useState(false);
   const [nodeCounters, setNodeCounters] = useState({});
+
+  const saveWorkflowMutation = useMutation({
+    mutationFn: async (workflowData) => {
+      const response = await fetch('http://localhost:3100/run', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(workflowData)
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to save workflow');
+      }
+      
+      return response.json();
+    },
+    onSuccess: (data) => {
+      console.log("Workflow saved successfully:", data);
+      alert("Workflow saved and executed successfully!");
+    },
+    onError: (error) => {
+      console.error("Failed to save workflow:", error);
+      alert(`Failed to save workflow: ${error.message}`);
+    }
+  });
 
   const addNode = (addNodeWorkflowFn) => (template) => {
     const templateId = template.id;
@@ -32,8 +59,8 @@ const WorkflowEditor = (work) => {
 
   const saveWorkflow = (save) => () => {
     const workflow = save();
-    console.log("Store this in DB: ", workflow);
-    alert("In this demo, data was dumped to console");
+    console.log("Saving workflow: ", workflow);
+    saveWorkflowMutation.mutate(workflow);
   };
 
   const toggleNodeLibrary = () => {
@@ -47,7 +74,7 @@ const WorkflowEditor = (work) => {
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
       <Workflow
-      //workflow={w1} keep the default workflow here!
+        workflow={workflow}
         scale={1}
         snapToGrid
         showGrid={showGrid}
@@ -58,22 +85,22 @@ const WorkflowEditor = (work) => {
               updateNode={updateNode}
               removeNode={removeNode}
               selectedNode={selectedNode}
-              //libraryNode={library[selectedNode.id]}
+              library={library}
             />
             <ButtonGroup>
               <Button
                 icon="plus-circle"
-                tooltip="This is the cog"
+                tooltip="Add node"
                 onClick={toggleNodeLibrary}
               />
               <Button
                 icon="save"
-                tooltip="This is the cog"
+                tooltip="Save workflow"
                 onClick={saveWorkflow(save)}
               />
               <ButtonToggle
                 icon="th"
-                tooltip="This is the cog"
+                tooltip="Toggle grid"
                 enabled={showGrid}
                 onClick={toggleGrid}
               />
@@ -82,6 +109,7 @@ const WorkflowEditor = (work) => {
               <NodeLibrary
                 onNodeSelect={addNode(add)}
                 onClose={toggleNodeLibrary}
+                library={library}
               />
             )}
           </>

@@ -1,17 +1,19 @@
 import React from "react";
-import Icon from "../../../../src/Canvas/Icon/Icon";
-import { nodeTemplates } from "./nodeTemplates";
+import Icon from "../../../../../src/Canvas/Icon/Icon";
 import styles from "./NodeLibrary.module.scss";
-import { SerializedNode } from "../../../../dist/types/workflow";
+import { SerializedNode } from "../../../../../dist/types/workflow";
+import type { NodeTemplate } from "../../../../../src/types/workflow";
 
 interface NodeLibraryProps {
   onNodeSelect: (node: SerializedNode) => void;
   onClose: () => void;
+  library: NodeTemplate[];
 }
 
 export const NodeLibrary: React.FC<NodeLibraryProps> = ({
   onNodeSelect,
   onClose,
+  library,
 }) => {
   const handleNodeClick = (node: SerializedNode) => {
     if (onNodeSelect) {
@@ -30,7 +32,7 @@ export const NodeLibrary: React.FC<NodeLibraryProps> = ({
           </button>
         </div>
         <div className={styles.grid}>
-          {nodeTemplates.map((node) => (
+          {library.map((node) => (
             <div
               key={node.instanceId}
               className={styles.nodeItem}

@@ -1,37 +1,41 @@
 import React, { createContext, useCallback, useEffect } from "react";
 import Canvas from "../Canvas/Canvas";
-import type { SerializedNode, SerializedWorkflow, WorkflowProps } from "../types/workflow";
+import type {
+  SerializedNode,
+  SerializedWorkflow,
+  WorkflowProps,
+} from "../types/workflow";
 import { useWorkflow } from "./useWorkflow";
 import styles from "./Workflow.module.scss";
 import { WorkflowData } from "./WorkflowData";
 
 export const WorkflowContext = createContext(null);
 
-const emptyWorkflow: SerializedWorkflow = {
-  id: "new-workflow",
-  name: "New Workflow",
-  description: "New Workflow",
-  nodes: [
-    {
-      name: "Start",
-      id: "START",
-      instanceId: "START",
-      icon: "sign-in-alt",
-      position: { x: -400, y: 0 },
-    },
-    {
-      name: "End",
-      id: "END",
-      instanceId: "END",
-      icon: "sign-out-alt",
-      position: { x: 350, y: 0 },
-    },
-  ],
-  connections: [],
-};
+// const emptyWorkflow: SerializedWorkflow = {
+//   id: "new-workflow",
+//   name: "New Workflow",
+//   description: "New Workflow",
+//   nodes: [
+//     {
+//       name: "Start",
+//       id: "START",
+//       instanceId: "START",
+//       icon: "sign-in-alt",
+//       position: { x: -400, y: 0 },
+//     },
+//     {
+//       name: "End",
+//       id: "END",
+//       instanceId: "END",
+//       icon: "sign-out-alt",
+//       position: { x: 350, y: 0 },
+//     },
+//   ],
+//   connections: [],
+// };
 
 export const Workflow = ({
-  workflow = emptyWorkflow,
+  workflow,
   workflowChanged = () => {},
   scale = 1,
   snapToGrid = false,
@@ -87,6 +91,34 @@ export const Workflow = ({
   const saveWorkflow = () => {
     return WorkflowData.export(state);
   };
+
+  // Handle keyboard events for deleting nodes
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Check if backspace key is pressed
+      if (event.key === "d") {
+        // Prevent default browser behavior (going back in history)
+        event.preventDefault();
+
+        // Only delete if there's a selected node and it's not START or END
+        if (
+          state.selectedNode &&
+          state.selectedNode.id !== "START" &&
+          state.selectedNode.id !== "END"
+        ) {
+          removeNode(state.selectedNode);
+        }
+      }
+    };
+
+    // Add event listener to document
+    document.addEventListener("keydown", handleKeyDown);
+
+    // Cleanup function to remove event listener
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [state.selectedNode, removeNode]);
 
   return (
     <div id="workflow-container" className={styles.CanvasContainer}>

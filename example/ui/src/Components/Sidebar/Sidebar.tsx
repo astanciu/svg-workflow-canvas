@@ -1,8 +1,8 @@
-import { Icon } from "svg-workflow-canvas";
+import Icon from "../../../../../src/Canvas/Icon/Icon";
 import styles from "./Sidebar.module.css";
 
 export const Sidebar = ({ add, save }) => {
-  return (
+  return ( 
     <div className={styles.sidebar}>
       <Item icon="plus-circle" onClick={add}>
         Add
