@@ -1,8 +1,8 @@
 import React from "react";
-import Icon from "../../../../src/Canvas/Icon/Icon";
+import Icon from "../../../../../src/Canvas/Icon/Icon";
 import styles from "./NodeLibrary.module.scss";
-import { SerializedNode } from "../../../../dist/types/workflow";
-import type { NodeTemplate } from "../../../../src/types/workflow";
+import { SerializedNode } from "../../../../../dist/types/workflow";
+import type { NodeTemplate } from "../../../../../src/types/workflow";
 
 interface NodeLibraryProps {
   onNodeSelect: (node: SerializedNode) => void;

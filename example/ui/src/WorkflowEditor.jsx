@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import Workflow from "svg-workflow-canvas";
+import { useMutation } from "@tanstack/react-query";
+import Workflow from "../../../src/index";
 import { Button } from "./Components/Button/Button";
 import { ButtonToggle } from "./Components/Button/ButtonToggle";
 import { ButtonGroup } from "./Components/Button/ButtonGroup";
@@ -10,6 +11,33 @@ const WorkflowEditor = ({library, NodeLibrary, workflow}) => {
   const [showGrid, setShowGrid] = useLocalStorage("settings.showGrid", true);
   const [showNodeLibrary, setShowNodeLibrary] = useState(false);
   const [nodeCounters, setNodeCounters] = useState({});
+
+  const saveWorkflowMutation = useMutation({
+    mutationFn: async (workflowData) => {
+      const response = await fetch('http://localhost:3100/run', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(workflowData)
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to save workflow');
+      }
+      
+      return response.json();
+    },
+    onSuccess: (data) => {
+      console.log("Workflow saved successfully:", data);
+      alert("Workflow saved and executed successfully!");
+    },
+    onError: (error) => {
+      console.error("Failed to save workflow:", error);
+      alert(`Failed to save workflow: ${error.message}`);
+    }
+  });
 
   const addNode = (addNodeWorkflowFn) => (template) => {
     const templateId = template.id;
@@ -31,8 +59,8 @@ const WorkflowEditor = ({library, NodeLibrary, workflow}) => {
 
   const saveWorkflow = (save) => () => {
     const workflow = save();
-    console.log("Store this in DB: ", workflow);
-    alert("In this demo, data was dumped to console");
+    console.log("Saving workflow: ", workflow);
+    saveWorkflowMutation.mutate(workflow);
   };
 
   const toggleNodeLibrary = () => {

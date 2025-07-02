@@ -1,4 +1,4 @@
-import type { NodeTemplate } from "../../../../src/types/workflow";
+import type { NodeTemplate } from "../../../../../src/types/workflow";
 
 export const nodeTemplates: NodeTemplate[] = [
     {
@@ -6,12 +6,34 @@ export const nodeTemplates: NodeTemplate[] = [
         id: "first",
         instanceId: "first",
         icon: "user-circle",
+        data: {
+          formDef: [
+            {
+              name: "First name",
+              type: "string",
+              label: "First name",
+              control: "input",
+              placeholder: "Enter first name"
+            }
+          ]
+        }
     },
     {
         name: "Get last",
         id: "last",
         instanceId: "last",
         icon: "user",
+        data: {
+          formDef: [
+            {
+              name: "Last name",
+              type: "string",
+              label: "Last name",
+              control: "input",
+              placeholder: "Enter last name"
+            }
+          ]
+        }
 
     },
     {
@@ -19,6 +41,17 @@ export const nodeTemplates: NodeTemplate[] = [
       id: "greet",
       instanceId: "greet",
       icon: "smile",
+      data: {
+        formDef: [
+          {
+            name: "Greet word",
+            type: "string",
+            label: "Gretting",
+            control: "input",
+            placeholder: "Enter greet"
+          }
+        ]
+      }
   },
     {
         name: "Message",
