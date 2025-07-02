@@ -1,9 +1,16 @@
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { Engine } from "./engine";
 import type { Context } from "hono";
 import type { Workflow } from "./types";
 
 const app = new Hono();
+
+app.use("/*", cors({
+  origin: ["http://localhost:3001", "http://localhost:5173"],
+  allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowHeaders: ["Content-Type", "Authorization"],
+}));
 
 app.get("/", (c: Context) => {
   return c.text("Server is running!");

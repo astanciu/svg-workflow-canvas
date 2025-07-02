@@ -1,5 +1,5 @@
 import React from "react";
-import Icon from "../../../../src/Canvas/Icon/Icon";
+import Icon from "../../../../../src/Canvas/Icon/Icon";
 import styles from "./Buttons.module.scss";
 
 type Props = {

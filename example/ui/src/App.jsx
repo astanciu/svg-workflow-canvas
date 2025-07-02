@@ -1,6 +1,9 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import WorkflowEditor from "./WorkflowEditor";
 import { nodeTemplates } from "./Components/NodeLibrary/nodeTemplates";
 import { NodeLibrary } from "./Components/NodeLibrary/NodeLibrary";
+
+const queryClient = new QueryClient();
 
 // Default empty workflow
 const newWorkflow = {
@@ -25,11 +28,13 @@ const newWorkflow = {
 
 const App = () => {
   return (
-    <WorkflowEditor
-      library={nodeTemplates}
-      NodeLibrary={NodeLibrary}
-      workflow={newWorkflow}
-    />
+    <QueryClientProvider client={queryClient}>
+      <WorkflowEditor
+        library={nodeTemplates}
+        NodeLibrary={NodeLibrary}
+        workflow={newWorkflow}
+      />
+    </QueryClientProvider>
   );
 };
 

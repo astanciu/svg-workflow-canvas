@@ -1,7 +1,7 @@
 import React, { type FunctionComponent } from "react";
-import { Node } from "svg-workflow-canvas";
+import { Node } from "../../../../../src/Canvas/Models";
 import styles from "./Panel.module.css";
-import type { NodeTemplate } from "../../../../src/types/workflow";
+import type { NodeTemplate } from "../../../../../src/types/workflow";
 
 type Props = {
   updateNode: (node) => void;
@@ -105,6 +105,7 @@ export const Panel: FunctionComponent<Props> = ({
 
   return (
     <div className={styles.Panel}>
+      <div className={styles.nodeId}>{node.instanceId}</div>
       <div>
         <div className={styles.inputGroup}>
           <label htmlFor="name">Node name</label>
