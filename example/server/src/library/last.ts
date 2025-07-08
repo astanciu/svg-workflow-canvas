@@ -1,8 +1,6 @@
-const runLast = async () => {
-  console.log("last");
-};
-
 export const last = {
   id: "last",
-  action: runLast,
+  async action(instanceId: string, data?: Record<string, any>) {
+    console.log(instanceId, data)
+  },
 };

@@ -4,6 +4,9 @@ export interface WorkflowNode {
   icon: string;
   instanceId: string;
   position: { x: number; y: number };
+  data?: {
+    formData?: Record<string, any>;
+  };
 }
 
 export interface WorkflowConnection {

@@ -7,7 +7,7 @@ import type { Workflow } from "./types";
 const app = new Hono();
 
 app.use("/*", cors({
-  origin: ["http://localhost:3001", "http://localhost:5173"],
+  origin: ["http://localhost:3099", "http://localhost:5173"],
   allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowHeaders: ["Content-Type", "Authorization"],
 }));

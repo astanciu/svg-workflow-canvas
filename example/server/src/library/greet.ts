@@ -1,8 +1,6 @@
-const runGreet = async () => {
-  console.log("greet");
-};
-
 export const greet = {
   id: "greet",
-  action: runGreet,
+  async action(instanceId: string, data?: Record<string, any>) {
+    console.log(instanceId, data)
+  },
 };
